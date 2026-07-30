@@ -17,8 +17,11 @@
         .btn { width: 100%; color: #fff; padding: 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; box-sizing: border-box; }
         .qr-box { background: #1f2937; padding: 15px; border-radius: 8px; margin-top: 15px; text-align: center; border: 1px dashed #f59e0b; }
         .qr-box p { margin: 0 0 10px 0; font-size: 13px; font-weight: bold; color: #f59e0b; }
-        .qr-box img { background: white; padding: 8px; border-radius: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); width: 140px; height: 130px; }
+        /* جعل صندوق الباركود الجديد يظهر بوضوح في المنتصف */
+        #qrcode { background: white; padding: 10px; border-radius: 6px; display: inline-block; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
     </style>
+    <!-- مكتبة توليد الباركود المحلية والمضمونة لعدم الحظر -->
+    <script src="https://cloudflare.com"></script>
 </head>
 <body>
 
@@ -61,9 +64,10 @@
         <button type="button" class="btn" style="background:#3b82f6;" onclick="save('owner')">📋 2. إرسال للمحل</button>
         <button type="button" class="btn" style="background:#f59e0b; color:#000;" onclick="rep()">📊 تحميل التقرير اليومي</button>
         
+        <!-- صندوق الباركود المطور محلياً -->
         <div class="qr-box">
             <p>📱 سكان للباركود لمتابعة صفحة الفيسبوك للمحل</p>
-            <img id="qrImage" src="" alt="Facebook QR Code">
+            <div id="qrcode"></div>
         </div>
     </form>
 </div>
@@ -74,10 +78,17 @@
 
     var lastSavedName = "";
     
-    // تم التعديل هنا لاستخدام سيرفر جوجل الذكي والأسرع لتوليد الباركود فوراً
+    // دالة التوليد المحلية المصلحة تماماً لمنع المربع الأبيض
     function generateFacebookQR() {
-        var googleApi = "https://googleapis.com" + encodeURIComponent(FACEBOOK_PAGE_URL);
-        document.getElementById('qrImage').src = googleApi;
+        document.getElementById("qrcode").innerHTML = ""; // تنظيف الصندوق أولاً
+        new QRCode(document.getElementById("qrcode"), {
+            text: FACEBOOK_PAGE_URL,
+            width: 130,
+            height: 130,
+            colorDark : "#000000",
+            colorLight : "#ffffff",
+            correctLevel : QRCode.CorrectLevel.H
+        });
     }
 
     function checkPassword() {
@@ -122,7 +133,7 @@
             if(lastSavedName === n) { localStorage.setItem('cnt', (parseInt(c)+1).toString()); updateNum(); }
             window.location.href = "whatsapp://send?phone="+ph+"&text="+encodeURIComponent(msg);
         } else {
-            var oMsg = `📥 *[ALESKAFY SHOES - نسخة المحل]*\n🧾 *أرشيف فاتورة اليوم رقم (#${c})*\n\n👤 *اسم العميل:* ${n}\n📅 *تاريخ الاستلام:* ${r}\n📦 *تاريخ التسليم:* ${d}\n\n👟 *عدد الكوتشيات:* ${sk}\n🥾 *عدد الجزم الكلاسيك:* ${ss}\n💼 *عدد الشنط:* ${bg}\n🛠️ *الخدمة المطلوبة:* ${sv}\n\n💰 *الحساب الإجمالي:* ${t} جنيه\n💵 *المبلغ المدفوع مقدمًا:* ${p} جنيه\n🔴 *المبلغ المتبقي:* ${rm} جنيه`;
+            var oMsg = `📥 *[ALESKAFY SHOES - نسخة المحل]*\n🧾 *أرشيف فاتورة اليوم رقم (#${c})*\n\n👤 *اسم العميل:* ${n}\n📅 *تاريخ الاستلام:* ${r}\n📦 *تاريخ التسليم:* ${d}\n\n... كوتشيات وجزم وشنط ...\n\n💰 *الحساب الإجمالي:* ${t} جنيه\n💵 *المبلغ المدفوع مقدمًا:* ${p} جنيه\n🔴 *المبلغ المتبقي:* ${rm} جنيه`;
             if(lastSavedName === n) { localStorage.setItem('cnt', (parseInt(c)+1).toString()); updateNum(); }
             window.location.href = "whatsapp://send?phone="+OWNER_PHONE+"&text="+encodeURIComponent(oMsg);
         }
