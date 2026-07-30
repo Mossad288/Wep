@@ -17,7 +17,7 @@
         .btn { width: 100%; color: #fff; padding: 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; box-sizing: border-box; }
         .qr-box { background: #1f2937; padding: 15px; border-radius: 8px; margin-top: 15px; text-align: center; border: 1px dashed #f59e0b; }
         .qr-box p { margin: 0 0 10px 0; font-size: 13px; font-weight: bold; color: #f59e0b; }
-        .qr-box img { background: white; padding: 8px; border-radius: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); width: 130px; height: 130px; }
+        .qr-box img { background: white; padding: 8px; border-radius: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); width: 140px; height: 130px; }
     </style>
 </head>
 <body>
@@ -43,7 +43,6 @@
             <div style="flex:1;"><label>📦 التسليم:</label><input type="date" id="dDate"></div>
         </div>
         
-        <!-- 3 خانات منسقة تماماً للأغراض شاملة الشنط -->
         <div class="row-3">
             <div><label>👟 كوتشيات:</label><input type="number" id="snk" value="0"></div>
             <div><label>🥾 جزم:</label><input type="number" id="shs" value="0"></div>
@@ -61,17 +60,24 @@
         <button type="button" class="btn" style="background:#22c55e; margin-top:15px;" onclick="save('client')">📱 1. إرسال للعميل</button>
         <button type="button" class="btn" style="background:#3b82f6;" onclick="save('owner')">📋 2. إرسال للمحل</button>
         <button type="button" class="btn" style="background:#f59e0b; color:#000;" onclick="rep()">📊 تحميل التقرير اليومي</button>
+        
+        <div class="qr-box">
+            <p>📱 سكان للباركود لمتابعة صفحة الفيسبوك للمحل</p>
+            <img id="qrImage" src="" alt="Facebook QR Code">
+        </div>
+    </form>
+</div>
 
 <script>
-    // تم ربط بيانات محلك الفعلية بنجاح هنا خلف الكواليس
-    var FACEBOOK_PAGE_URL = "https://www.facebook.com/share/1EiLHzcbSM/?mibextid=wwXIfr";
+    var FACEBOOK_PAGE_URL = "https://facebook.com";
     var OWNER_PHONE = "201090274601"; 
 
     var lastSavedName = "";
     
+    // تم التعديل هنا لاستخدام سيرفر جوجل الذكي والأسرع لتوليد الباركود فوراً
     function generateFacebookQR() {
-        var apiGrid = "https://qrserver.com" + encodeURIComponent(FACEBOOK_PAGE_URL);
-        document.getElementById('qrImage').src = apiGrid;
+        var googleApi = "https://googleapis.com" + encodeURIComponent(FACEBOOK_PAGE_URL);
+        document.getElementById('qrImage').src = googleApi;
     }
 
     function checkPassword() {
@@ -112,11 +118,11 @@
         }
         if (m === 'client') {
             if (ph.startsWith("0")) ph = "2" + ph;
-            var msg = `✨ *ALESKAFY SHOES* ✨\n🧾 *طلب صيانة جديد رقم (#${c})*\n\n👤 *اسم العميل:* ${n}\n📅 *تاريخ الاستلام:* ${r}\n📦 *تاريخ التسليم المتوقع:* ${d}\n\n👟 *عدد الكوتشيات:* ${sk}\n🥾 *عدد الجزم الكلاسيك:* ${ss}\n💼 *عدد الشنط:* ${bg}\n🛠️ *الخدمة المطلوبة:* ${sv}\n\n💰 *الحساب الإجمالي:* ${t} جنيه\n💵 *المدفوع مقدمًا:* ${p} جنيه\n🔴 *المبلغ المتبقي:* ${rm} جنيه`;
+            var msg = `✨ *ALESKAFY SHOES* ✨\n🧾 *طلب صيانة جديد رقم (#${c})*\n\n👤 *اسم العميل:* ${n}\n📅 *تاريخ الاستلام:* ${r}\n📦 *تاريخ التسليم المتوقع:* ${d}\n\n👟 *عدد الكوتشيات:* ${sk}\n🥾 *عدد الجزم الكلاسيك:* ${ss}\n💼 *عدد الشنط:* ${bg}\n🛠️ *الخدمة المطلوبة:* ${sv}\n\n💰 *الحساب الإجمالي:* ${t} جنيه\n💵 *المبلغ المدفوع مقدمًا:* ${p} جنيه\n🔴 *المبلغ المتبقي:* ${rm} جنيه`;
             if(lastSavedName === n) { localStorage.setItem('cnt', (parseInt(c)+1).toString()); updateNum(); }
             window.location.href = "whatsapp://send?phone="+ph+"&text="+encodeURIComponent(msg);
         } else {
-            var oMsg = `📥 *[ALESKAFY SHOES - نسخة المحل]*\n🧾 *أرشيف فاتورة اليوم رقم (#${c})*\n\n👤 *اسم العميل:* ${n}\n📅 *تاريخ الاستلام:* ${r}\n📦 *تاريخ التسليم:* ${d}\n\n👟 *عدد الكوتشيات:* ${sk}\n🥾 *عدد الجزم الكلاسيك:* ${ss}\n💼 *عدد الشنط:* ${bg}\n🛠️ *الخدمة المطلوبة:* ${sv}\n\n💰 *الحساب الإجمالي:* ${t} جنيه\n💵 *المدفوع مقدمًا:* ${p} جنيه\n🔴 *المبلغ المتبقي:* ${rm} جنيه`;
+            var oMsg = `📥 *[ALESKAFY SHOES - نسخة المحل]*\n🧾 *أرشيف فاتورة اليوم رقم (#${c})*\n\n👤 *اسم العميل:* ${n}\n📅 *تاريخ الاستلام:* ${r}\n📦 *تاريخ التسليم:* ${d}\n\n👟 *عدد الكوتشيات:* ${sk}\n🥾 *عدد الجزم الكلاسيك:* ${ss}\n💼 *عدد الشنط:* ${bg}\n🛠️ *الخدمة المطلوبة:* ${sv}\n\n💰 *الحساب الإجمالي:* ${t} جنيه\n💵 *المبلغ المدفوع مقدمًا:* ${p} جنيه\n🔴 *المبلغ المتبقي:* ${rm} جنيه`;
             if(lastSavedName === n) { localStorage.setItem('cnt', (parseInt(c)+1).toString()); updateNum(); }
             window.location.href = "whatsapp://send?phone="+OWNER_PHONE+"&text="+encodeURIComponent(oMsg);
         }
