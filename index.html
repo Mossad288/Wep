@@ -7,7 +7,6 @@
     <style>
         body { font-family: sans-serif; background: #0b0f19; margin: 0; padding: 15px; color: #fff; display: flex; align-items: center; justify-content: center; min-height: 100vh; box-sizing: border-box; }
         .lock-container { width: 100%; max-width: 380px; background: #111827; padding: 30px 20px; border-radius: 12px; border: 1px solid #f59e0b; text-align: center; }
-        .lock-title { font-size: 26px; font-weight: 900; color: #f59e0b; margin: 0; }
         .container { width: 100%; max-width: 430px; background: #111827; padding: 20px; border-radius: 12px; border: 1px solid #f59e0b; display: none; }
         h1 { text-align: center; color: #f59e0b; margin: 0; font-size: 24px; }
         .badge { background: #f59e0b; color: #000; font-weight: bold; padding: 4px 10px; border-radius: 15px; display: inline-block; margin: 5px 0; font-size: 12px; }
@@ -15,13 +14,14 @@
         input { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #334155; border-radius: 6px; background: #1f2937; color: #fff; box-sizing: border-box; }
         .row { display: flex; gap: 10px; } .row div { flex: 1; }
         .btn { width: 100%; color: #fff; padding: 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; box-sizing: border-box; }
-        .btn-fb { background: #1877f2; color: #fff; font-size: 15px; box-shadow: 0 4px 12px rgba(24, 119, 242, 0.3); margin-top: 15px; }
+        .notice-box { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; padding: 12px; margin-top: 20px; text-align: center; font-size: 13px; color: #fca5a5; }
+        .thanks-box { text-align: center; font-size: 14px; font-weight: bold; color: #f59e0b; margin-top: 12px; }
     </style>
 </head>
 <body>
 
 <div id="lockScreen" class="lock-container">
-    <h1 class="lock-title">ALESKAFY SHOES</h1>
+    <h1 style="color:#f59e0b; margin:0;">ALESKAFY SHOES</h1>
     <p style="color:#94a3b8; font-size:12px; margin-bottom:20px;">Secure Management System</p>
     <input type="password" id="passInput" placeholder="أدخل كود الدخول السري" style="text-align:center; font-size:18px; margin-bottom:15px;">
     <button type="button" class="btn" style="background:#f59e0b; color:#000; font-weight:800;" onclick="checkPassword()">🔓 تسجيل الدخول</button>
@@ -54,25 +54,21 @@
         <button type="button" class="btn" style="background:#22c55e; margin-top:15px;" onclick="save('client')">📱 1. إرسال للعميل</button>
         <button type="button" class="btn" style="background:#3b82f6;" onclick="save('owner')">📋 2. إرسال للمحل</button>
         <button type="button" class="btn" style="background:#f59e0b; color:#000;" onclick="rep()">📊 تحميل التقرير اليومي</button>
-        
-        <!-- زر السوشيال ميديا الجديد المباشر لصفحة الفيسبوك الخاصة بكم -->
-        <a href="https://facebook.com" target="_blank" class="btn btn-fb"> السوشيال ميديا لمركزنا </a>
+        <a href="https://facebook.com" target="_blank" style="background:#1877f2;" class="btn">🌐 السوشيال ميديا للمحل</a>
+
+        <div class="notice-box">⚠️ تنبيه: المحل غير مسؤول عن أي شيء بعد ١٥ يوم من ميعاد التسليم.</div>
+        <div class="thanks-box">شكراً لزيارتكم الجميلة ❤️</div>
     </form>
 </div>
 
 <script>
-    var OWNER_PHONE = "201090274601"; 
-    var lastSavedName = "";
-
+    var OWNER_PHONE = "201090274601"; var lastSavedName = "";
     function checkPassword() {
         if (document.getElementById('passInput').value === '2020') {
             document.getElementById('lockScreen').style.display = 'none';
             document.getElementById('mainApp').style.display = 'block';
             resetCheck(); updateNum();
-        } else {
-            alert("❌ رمز الدخول السري خاطئ!");
-            document.getElementById('passInput').value = "";
-        }
+        } else { alert("❌ رمز خاطئ!"); document.getElementById('passInput').value = ""; }
     }
     function calc() {
         var t = parseFloat(document.getElementById('tot').value) || 0;
@@ -85,39 +81,38 @@
             localStorage.setItem('day_s', n); localStorage.setItem('cnt', '1'); localStorage.setItem('list', JSON.stringify([]));
         }
     }
-    function updateNum() {
-        document.getElementById('badge').innerText = "فاتورة اليوم رقم: #" + (localStorage.getItem('cnt') || '1');
-    }
+    function updateNum() { document.getElementById('badge').innerText = "فاتورة اليوم رقم: #" + (localStorage.getItem('cnt') || '1'); }
     function save(m) {
-        var n = document.getElementById('name').value; var t = document.getElementById('tot').value; var ph = document.getElementById('phone').value.trim();
-        if(!n || !t || (m==='client' && !ph)) { alert("املا البيانات الأساسية!"); return; }
+        var n = document.getElementById('name').value, t = document.getElementById('tot').value, ph = document.getElementById('phone').value.trim();
+        if(!n || !t || (m==='client' && !ph)) { alert("املا البيانات!"); return; }
         resetCheck();
         var r = document.getElementById('rDate').value, d = document.getElementById('dDate').value, sk = document.getElementById('snk').value, ss = document.getElementById('shs').value, bg = document.getElementById('bags').value, sv = document.getElementById('srv').value, p = document.getElementById('paid').value, rm = document.getElementById('rem').value, c = localStorage.getItem('cnt') || '1';
         var list = JSON.parse(localStorage.getItem('list')) || [];
         if (n !== lastSavedName) {
             list.push({ id: c, name: n, total: parseFloat(t)||0, paid: parseFloat(p)||0, rem: parseFloat(rm)||0 });
             localStorage.setItem('list', JSON.stringify(list)); lastSavedName = n;
-        } else {
-            c = (parseInt(c) - 1).toString(); if(c === "0") c = "1";
-        }
+        } else { c = (parseInt(c) - 1).toString(); if(c === "0") c = "1"; }
+        
+        var txt = `👤 *اسم العميل:* ${n}\n📅 *تاريخ الاستلام:* ${r}\n📦 *تاريخ التسليم:* ${d}\n\n👟 *كوتشيات:* ${sk} | 🥾 *جزم:* ${ss} | 💼 *شنط:* ${bg}\n🛠️ *الخدمة:* ${sv}\n\n💰 *الحساب الكلي:* ${t} جنيه\n💵 *المدفوع مقدمًا:* ${p} جنيه\n🔴 *المبلغ المتبقي:* ${rm} جنيه\n\n⚠️ *تنبيه:* المحل غير مسؤول عن أي شيء بعد ١٥ يوم من ميعاد التسليم.\n\n🙏 *شكراً لزيارتكم الجميلة* ❤️`;
+        
         if (m === 'client') {
             if (ph.startsWith("0")) ph = "2" + ph;
-            var msg = `✨ *ALESKAFY SHOES* ✨\n🧾 *طلب صيانة جديد رقم (#${c})*\n\n👤 *اسم العميل:* ${n}\n📅 *تاريخ الاستلام:* ${r}\n📦 *تاريخ التسليم المتوقع:* ${d}\n\n👟 *عدد الكوتشيات:* ${sk}\n🥾 *عدد الجزم الكلاسيك:* ${ss}\n💼 *عدد الشنط:* ${bg}\n🛠️ *الخدمة المطلوبة:* ${sv}\n\n💰 *الحساب الإجمالي:* ${t} جنيه\n💵 *المبلغ المدفوع مقدمًا:* ${p} جنيه\n🔴 *المبلغ المتبقي:* ${rm} جنيه`;
+            var msg = `✨ *ALESKAFY SHOES* ✨\n🧾 *طلب صيانة جديد رقم (#${c})*\n\n` + txt;
             if(lastSavedName === n) { localStorage.setItem('cnt', (parseInt(c)+1).toString()); updateNum(); }
             window.location.href = "whatsapp://send?phone="+ph+"&text="+encodeURIComponent(msg);
         } else {
-            var oMsg = `📥 *[ALESKAFY SHOES - نسخة المحل]*\n🧾 *أرشيف فاتورة اليوم رقم (#${c})*\n\n👤 *اسم العميل:* ${n}\n📅 *تاريخ الاستلام:* ${r}\n📦 *تاريخ التسليم:* ${d}\n\n... كوتشيات وجزم وشنط ...\n\n💰 *الحساب الإجمالي:* ${t} جنيه\n💵 *المبلغ المدفوع مقدمًا:* ${p} جنيه\n🔴 *المبلغ المتبقي:* ${rm} جنيه`;
+            var oMsg = `📥 *[ALESKAFY SHOES - نسخة المحل]*\n🧾 *أرشيف فاتورة اليوم رقم (#${c})*\n\n` + txt;
             if(lastSavedName === n) { localStorage.setItem('cnt', (parseInt(c)+1).toString()); updateNum(); }
             window.location.href = "whatsapp://send?phone="+OWNER_PHONE+"&text="+encodeURIComponent(oMsg);
         }
     }
     function rep() {
-        var list = JSON.parse(localStorage.getItem('list')) || []; if (list.length === 0) { alert("لا توجد فواتير اليوم!"); return; }
+        var list = JSON.parse(localStorage.getItem('list')) || []; if (list.length === 0) { alert("لا توجد فواتير!"); return; }
         var t = 0, p = 0, r = 0, txt = "📊 تقرير حسابات الإسكافي شوز 📊\n====================\n\n";
         list.forEach(function(x) {
-            txt += "فاتورة #"+x.id+" - العميل: "+x.name+"\nالحساب: "+x.total+" ج | المدفوع: "+x.paid+" ج | المتبقي: "+x.rem+" ج\n--------------------\n"; t+=x.total; p+=x.paid; r+=x.rem;
+            txt += "فاتورة #"+x.id+" - العميل: "+x.name+"\nالحساب: "+x.total+" ج | المدفوع: "+x.paid+" ج | الباقي: "+x.rem+" ج\n--------------------\n"; t+=x.total; p+=x.paid; r+=x.rem;
         });
-        txt += "\n====================\n💰 إجمالي اليوم: "+t+" ج\n💵 إجمالي الخزنة: "+p+" ج\n🔴 إجمالي المتبقي بالسوق: "+r+" ج";
+        txt += "\n====================\n💰 إجمالي اليوم: "+t+" ج\n💵 إجمالي الخزنة: "+p+" ج\n🔴 إجمالي المتبقي: "+r+" ج";
         var b = new Blob([txt], { type: 'text/plain;charset=utf-8' }); var lnk = document.createElement('a');
         lnk.href = URL.createObjectURL(b); lnk.download = "Report_" + new Date().toISOString().slice(0,10) + ".txt";
         document.body.appendChild(lnk); lnk.click(); document.body.removeChild(lnk);
