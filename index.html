@@ -13,7 +13,6 @@
         input { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px; }
         .row { display: flex; gap: 10px; }
         .row div { flex: 1; }
-        /* تصميم الأزرار المنفصلة */
         .btn-client { width: 100%; background-color: #25D366; color: white; padding: 14px; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; box-sizing: border-box; }
         .btn-client:hover { background-color: #1ebd57; }
         .btn-owner { width: 100%; background-color: #007bff; color: white; padding: 14px; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; box-sizing: border-box; }
@@ -72,10 +71,7 @@
         <label>المبلغ المتبقي (جنيه):</label>
         <input type="number" id="remainingAmount" readonly style="background-color: #e9ecef;">
 
-        <!-- الزر الأول للعميل -->
         <button type="button" class="btn-client" onclick="sendToClient()">📱 1. إرسال الفاتورة للعميل</button>
-        
-        <!-- الزر الثاني لك أنت صاحب المحل -->
         <button type="button" class="btn-owner" onclick="sendToOwner()">📋 2. إرسال نسخة وتأكيد للمحل</button>
     </form>
 </div>
@@ -87,35 +83,22 @@
         document.getElementById('remainingAmount').value = total - paid;
     }
 
-    // دالة لتجهيز نص الفاتورة الموحد لمنع التكرار
-    function generateMessage() {
-        const name = document.getElementById('clientName').value;
-        const receiveDate = document.getElementById('receiveDate').value;
-        const deliveryDate = document.getElementById('deliveryDate').value;
-        const sneakers = document.getElementById('sneakersCount').value;
-        const shoes = document.getElementById('shoesCount').value;
-        const service = document.getElementById('serviceType').value;
-        const total = document.getElementById('totalAmount').value;
-        const paid = document.getElementById('paidAmount').value;
-        const remaining = document.getElementById('remainingAmount').value;
-
-        // توليد رابط التتبع المخصص لصفحة track.html
-        const trackPageUrl = `https://github.io{encodeURIComponent(name)}&rec=${receiveDate}&del=${deliveryDate}&snk=${sneakers}&shs=${shoes}&srv=${encodeURIComponent(service)}&tot=${total}&paid=${paid}&rem=${remaining}`;
-
-        return `✨ *طلب صيانة أحذية جديد* ✨\n\n` +
-               `👤 *اسم العميل:* ${name}\n` +
-               `📅 *تاريخ الاستلام:* ${receiveDate}\n` +
-               `📦 *تاريخ التسليم المتوقع:* ${deliveryDate}\n\n` +
-               `👟 *عدد الكوتشيات:* ${sneakers}\n` +
-               `🥾 *عدد الجزم الكلاسيك:* ${shoes}\n` +
-               `🛠️ *الخدمة المطلوبة:* ${service}\n\n` +
-               `💰 *الحساب الإجمالي:* ${total} جنيه\n` +
-               `💵 *المدفوع مقدمًا:* ${paid} جنيه\n` +
-               `🔴 *المبلغ المتبقي:* ${remaining} جنيه\n\n` +
-               `🔗 *رابط تتبع الفاتورة والتحويل:* \n${trackPageUrl}`;
+    // دالة لتجميع البيانات الأساسية المشتركة بين الرسالتين
+    function getBaseData() {
+        return {
+            name: document.getElementById('clientName').value,
+            receiveDate: document.getElementById('receiveDate').value,
+            deliveryDate: document.getElementById('deliveryDate').value,
+            sneakers: document.getElementById('sneakersCount').value,
+            shoes: document.getElementById('shoesCount').value,
+            service: document.getElementById('serviceType').value,
+            total: document.getElementById('totalAmount').value,
+            paid: document.getElementById('paidAmount').value,
+            remaining: document.getElementById('remainingAmount').value
+        };
     }
 
-    // 1. إرسال للعميل
+    // 1. إرسال للعميل (يحتوي على رابط التتبع)
     function sendToClient() {
         let phone = document.getElementById('clientPhone').value.trim();
         if(!phone || !document.getElementById('clientName').value) {
@@ -124,26 +107,61 @@
         }
         if (phone.startsWith("0")) phone = "2" + phone;
 
-        const encodedMessage = encodeURIComponent(generateMessage());
-        window.location.href = "whatsapp://send?phone=" + phone + "&text=" + encodedMessage;
+        const d = getBaseData();
+
+        // توليد الرابط المخصص للعميل فقط
+        const trackPageUrl = "https://github.io" + encodeURIComponent(d.name) +
+                             "&rec=" + d.receiveDate +
+                             "&del=" + d.deliveryDate +
+                             "&snk=" + d.sneakers +
+                             "&shs=" + d.shoes +
+                             "&srv=" + encodeURIComponent(d.service) +
+                             "&tot=" + d.total +
+                             "&paid=" + d.paid +
+                             "&rem=" + d.remaining;
+
+        const clientMessage = `✨ *طلب صيانة أحذية جديد* ✨\n\n` +
+                              `👤 *اسم العميل:* ${d.name}\n` +
+                              `📅 *تاريخ الاستلام:* ${d.receiveDate}\n` +
+                              `📦 *تاريخ التسليم المتوقع:* ${d.deliveryDate}\n\n` +
+                              `👟 *عدد الكوتشيات:* ${d.sneakers}\n` +
+                              `🥾 *عدد الجزم الكلاسيك:* ${d.shoes}\n` +
+                              `🛠️ *الخدمة المطلوبة:* ${d.service}\n\n` +
+                              `💰 *الحساب الإجمالي:* ${d.total} جنيه\n` +
+                              `💵 *المدفوع مقدمًا:* ${d.paid} جنيه\n` +
+                              `🔴 *المبلغ المتبقي:* ${d.remaining} جنيه\n\n` +
+                              `🔗 *رابط تتبع الفاتورة والتحويل:* \n` + trackPageUrl;
+
+        window.location.href = "whatsapp://send?phone=" + phone + "&text=" + encodeURIComponent(clientMessage);
     }
 
-    // 2. إرسال لك أنت كصاحب محل
+    // 2. إرسال لك أنت كصاحب محل (بيانات فقط بدون رابط)
     function sendToOwner() {
         if(!document.getElementById('clientName').value || !document.getElementById('totalAmount').value) {
             alert("⚠️ برجاء ملء البيانات الأساسية أولاً!");
             return;
         }
-        const myPhone = "201014828660"; // رقم محلك الثابت
+        const myPhone = "201014828660"; 
+        const d = getBaseData();
+
+        // صياغة الرسالة الخاصة بك بدون تضمين أي روابط
+        const ownerMessage = `📥 *[نسخة المحل للتأكيد والأرشفة]*\n\n` +
+                             `✨ *طلب صيانة أحذية جديد* ✨\n\n` +
+                             `👤 *اسم العميل:* ${d.name}\n` +
+                             `📅 *تاريخ الاستلام:* ${d.receiveDate}\n` +
+                             `📦 *تاريخ التسليم المتوقع:* ${d.deliveryDate}\n\n` +
+                             `👟 *عدد الكوتشيات:* ${d.sneakers}\n` +
+                             `🥾 *عدد الجزم الكلاسيك:* ${d.shoes}\n` +
+                             `🛠️ *الخدمة المطلوبة:* ${d.service}\n\n` +
+                             `💰 *الحساب الإجمالي:* ${d.total} جنيه\n` +
+                             `💵 *المدفوع مقدمًا:* ${d.paid} جنيه\n` +
+                             `🔴 *المبلغ المتبقي:* ${d.remaining} جنيه`;
         
-        // إضافة كلمة (نسخة المحل للتأكيد) في بداية الرسالة الموجهة لك
-        const ownerMessage = `📥 *[نسخة المحل للتأكيد والأرشفة]*\n\n` + generateMessage();
-        
-        const encodedMessage = encodeURIComponent(ownerMessage);
-        window.location.href = "whatsapp://send?phone=" + myPhone + "&text=" + encodedMessage;
+        window.location.href = "whatsapp://send?phone=" + myPhone + "&text=" + encodeURIComponent(ownerMessage);
     }
 </script>
 </body>
 </html>
+
 
 
