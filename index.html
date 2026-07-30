@@ -3,29 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إدارة طلبات محل الأحذية - نسخة الهاتف</title>
+    <title>إدارة طلبات محل الأحذية</title>
     <style>
         body { font-family: Arial, sans-serif; background-color: #f4f7f6; margin: 0; padding: 15px; }
         .container { max-width: 100%; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        h2 { text-align: center; color: #333; font-size: 20px; }
+        h2 { text-align: center; color: #333; font-size: 20px; margin-bottom: 5px; }
+        h4 { text-align: center; color: #666; margin-top: 0; font-size: 14px; }
         label { font-weight: bold; display: block; margin-top: 12px; font-size: 14px; }
-        input, select { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px; }
+        input { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px; }
         .row { display: flex; gap: 10px; }
         .row div { flex: 1; }
-        button { width: 100%; background-color: #28a745; color: white; padding: 12px; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 15px; }
-        .vodafone-btn { background-color: #e60000; text-align: center; display: block; padding: 12px; color: white; text-decoration: none; border-radius: 5px; margin-top: 15px; font-weight: bold; font-size: 14px; }
-        .orders-list { margin-top: 25px; padding: 10px; background: #eee; border-radius: 5px; }
-        .order-card { background: white; padding: 10px; margin-bottom: 10px; border-right: 5px solid #28a745; border-radius: 3px; font-size: 13px; }
+        .btn-success { width: 100%; background-color: #25D366; color: white; padding: 14px; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-success:hover { background-color: #1ebd57; }
+        .vodafone-box { background-color: #fff5f5; border: 2px dashed #e60000; padding: 12px; border-radius: 5px; margin-top: 15px; text-align: center; }
+        .vodafone-box p { margin: 5px 0; font-weight: bold; color: #333; font-size: 15px; }
+        .vodafone-btn { background-color: #e60000; text-align: center; display: block; padding: 10px; color: white; text-decoration: none; border-radius: 5px; margin-top: 8px; font-weight: bold; font-size: 14px; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h2>👟 نظام إدارة طلبات المحل 🥾</h2>
+    <h4>تسجيل الطلب وإرساله للواتساب تلقائياً</h4>
     
     <form id="orderForm">
         <label>اسم العميل:</label>
-        <input type="text" id="clientName" required placeholder="اسم العميل">
+        <input type="text" id="clientName" required placeholder="اسم العميل ثلاثي">
 
         <div class="row">
             <div>
@@ -44,97 +47,88 @@
                 <input type="number" id="sneakersCount" value="0" min="0">
             </div>
             <div>
-                <label>عدد الجزم:</label>
+                <label>عدد الجزم الكلاسيك:</label>
                 <input type="number" id="shoesCount" value="0" min="0">
             </div>
         </div>
 
-        <label>العمل المطلوب (التصليح/التنظيف):</label>
-        <input type="text" id="serviceType" required placeholder="مثال: غسيل وتجديد نعل">
+        <label>العمل المطلوب (ما الذي سيتم عمله؟):</label>
+        <input type="text" id="serviceType" required placeholder="مثال: غسيل وتجديد نعل، خياطة">
 
         <div class="row">
             <div>
-                <label>الحساب كام:</label>
+                <label>الحساب الإجمالي (جنيه):</label>
                 <input type="number" id="totalAmount" required oninput="calculateRemaining()">
             </div>
             <div>
-                <label>المدفوع مقدمًا:</label>
+                <label>المدفوع مقدمًا (جنيه):</label>
                 <input type="number" id="paidAmount" required oninput="calculateRemaining()">
             </div>
         </div>
 
-        <label>المبلغ المتبقي:</label>
+        <label>المبلغ المتبقي (جنيه):</label>
         <input type="number" id="remainingAmount" readonly style="background-color: #e9ecef;">
 
-        <button type="button" onclick="saveOrder()">حفظ الطلب بالذاكرة</button>
+        <!-- زر الحفظ والإرسال المباشر للواتساب -->
+        <button type="button" class="btn-success" onclick="sendToWhatsApp()">📱 حفظ الطلب وإرساله للواتساب</button>
     </form>
 
-    <!-- لينك فودافون كاش سحري يفتح الواتساب مباشرة للدفع -->
-    <a href="https://wa.me" target="_blank" class="vodafone-btn">💳 الدفع عبر فودافون كاش</a>
-
-    <div class="orders-list">
-        <h3>📋 الطلبات المسجلة حالياً:</h3>
-        <div id="ordersContainer">لا توجد طلبات مسجلة بعد.</div>
+    <!-- قسم فودافون كاش المعروض للعميل -->
+    <div class="vodafone-box">
+        <p>💳 رقم فودافون كاش للمحل: <span style="color: #e60000; font-size: 18px;">01014828660</span></p>
+        <p style="font-size: 12px; color: #666; font-weight: normal;">(برجاء تحويل المبلغ المقدم أو الكامل على هذا الرقم وإرسال لقطة شاشة للتحويل)</p>
+        <a id="vodaLink" href="#" target="_blank" class="vodafone-btn">اضغط هنا لتأكيد الدفع عبر الواتساب</a>
     </div>
 </div>
 
 <script>
+    // تم ضبط رقمك الشخصي هنا لاستلام الرسائل والكاش
+    const MY_PHONE_NUMBER = "201014828660"; 
+    const VODAFONE_CASH_NUM = "01014828660";
+
+    // تحديث رابط فودافون كاش تلقائياً
+    document.getElementById('vodaLink').href = `https://wa.me{MY_PHONE_NUMBER}?text=أريد%20تأكيد%20تحويل%20فودافون%20كاش%20على%20الرقم%20${VODAFONE_CASH_NUM}`;
+
     function calculateRemaining() {
         const total = parseFloat(document.getElementById('totalAmount').value) || 0;
         const paid = parseFloat(document.getElementById('paidAmount').value) || 0;
         document.getElementById('remainingAmount').value = total - paid;
     }
 
-    // محاكاة للباك آند: حفظ البيانات في الـ LocalStorage الخاص بالهاتف
-    function saveOrder() {
+    function sendToWhatsApp() {
         const name = document.getElementById('clientName').value;
+        const receiveDate = document.getElementById('receiveDate').value;
+        const deliveryDate = document.getElementById('deliveryDate').value;
+        const sneakers = document.getElementById('sneakersCount').value;
+        const shoes = document.getElementById('shoesCount').value;
         const service = document.getElementById('serviceType').value;
-        if(!name || !service) return alert("املا البيانات أولاً");
+        const total = document.getElementById('totalAmount').value;
+        const paid = document.getElementById('paidAmount').value;
+        const remaining = document.getElementById('remainingAmount').value;
 
-        const order = {
-            id: Math.floor(1000 + Math.random() * 9000),
-            clientName: name,
-            receiveDate: document.getElementById('receiveDate').value,
-            deliveryDate: document.getElementById('deliveryDate').value,
-            sneakersCount: document.getElementById('sneakersCount').value,
-            shoesCount: document.getElementById('shoesCount').value,
-            serviceType: service,
-            totalAmount: document.getElementById('totalAmount').value,
-            paidAmount: document.getElementById('paidAmount').value,
-            remainingAmount: document.getElementById('remainingAmount').value
-        };
-
-        let orders = JSON.parse(localStorage.getItem('shoe_orders')) || [];
-        orders.push(order);
-        localStorage.setItem('shoe_orders', JSON.stringify(orders));
-        
-        alert("✅ تم حفظ الطلب في ذاكرة الموقع بنجاح!");
-        displayOrders();
-        document.getElementById('orderForm').reset();
-    }
-
-    function displayOrders() {
-        let orders = JSON.parse(localStorage.getItem('shoe_orders')) || [];
-        const container = document.getElementById('ordersContainer');
-        if(orders.length === 0) {
-            container.innerHTML = "لا توجد طلبات.";
+        if(!name || !service || !total) {
+            alert("⚠️ برجاء ملء البيانات الأساسية (الاسم، الخدمة، الحساب) أولاً!");
             return;
         }
-        container.innerHTML = "";
-        orders.forEach(o => {
-            container.innerHTML += `
-                <div class="order-card">
-                    <b>رقم الطلب:</b> #${o.id} | <b>العميل:</b> ${o.clientName}<br>
-                    <b>الأشياء:</b> كوتشي (${o.sneakersCount}) - جزمة (${o.shoesCount})<br>
-                    <b>المطلوب:</b> ${o.serviceType}<br>
-                    <b>التوصيل:</b> من ${o.receiveDate} إلى ${o.deliveryDate}<br>
-                    <b>الحساب:</b> كلي: ${o.totalAmount} | مدفوع: ${o.paidAmount} | <span style="color:red">متبقي: ${o.remainingAmount}</span>
-                </div>
-            `;
-        });
+
+        // صياغة الفاتورة بشكل احترافي للواتساب
+        const message = `✨ *طلب صيانة أحذية جديد* ✨\n\n` +
+                        `👤 *اسم العميل:* ${name}\n` +
+                        `📅 *تاريخ الاستلام:* ${receiveDate}\n` +
+                        `📦 *تاريخ التسليم:* ${deliveryDate}\n\n` +
+                        `👟 *عدد الكوتشيات:* ${sneakers}\n` +
+                        `🥾 *عدد الجزم الكلاسيك:* ${shoes}\n` +
+                        `🛠️ *الخدمة المطلوبة:* ${service}\n\n` +
+                        `💰 *الحساب الإجمالي:* ${total} جنيه\n` +
+                        `💵 *المدفوع مقدمًا:* ${paid} جنيه\n` +
+                        `🔴 *المبلغ المتبقي:* ${remaining} جنيه\n\n` +
+                        `💳 _تم التنسيق عبر نظام المحل الذكي_`;
+
+        const encodedMessage = encodeURIComponent(message);
+        const whatsappUrl = `https://wa.me{MY_PHONE_NUMBER}?text=${encodedMessage}`;
+        window.open(whatsappUrl, '_blank');
     }
-    // عرض الطلبات عند فتح الصفحة
-    displayOrders();
 </script>
 </body>
 </html>
+
