@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إدارة طلبات محل الأحذية</title>
+    <title>لوحة إدارة طلبات المحل</title>
     <style>
         body { font-family: Arial, sans-serif; background-color: #f4f7f6; margin: 0; padding: 15px; }
         .container { max-width: 100%; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); box-sizing: border-box; }
@@ -14,21 +14,20 @@
         .row { display: flex; gap: 10px; }
         .row div { flex: 1; }
         .btn-success { width: 100%; background-color: #25D366; color: white; padding: 14px; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; box-sizing: border-box; }
-        .btn-success:hover { background-color: #1ebd57; }
-        .vodafone-box { background-color: #fff5f5; border: 2px dashed #e60000; padding: 12px; border-radius: 5px; margin-top: 15px; text-align: center; }
-        .vodafone-box p { margin: 5px 0; font-weight: bold; color: #333; font-size: 15px; }
-        .vodafone-btn { background-color: #e60000; text-align: center; display: block; padding: 10px; color: white; text-decoration: none; border-radius: 5px; margin-top: 8px; font-weight: bold; font-size: 14px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>👟 El Eskafy Shose  🥾</h2>
-    <h4>تسجيل الطلب وإرساله للواتساب تلقائياً</h4>
+    <h2>👟 نظام إدارة طلبات المحل 🥾</h2>
+    <h4>تسجيل الطلب وإرساله للعميل تلقائياً</h4>
     
     <form id="orderForm">
         <label>اسم العميل:</label>
         <input type="text" id="clientName" required placeholder="اسم العميل ثلاثي">
+
+        <label>رقم واتساب العميل:</label>
+        <input type="tel" id="clientPhone" required placeholder="مثال: 01012345678">
 
         <div class="row">
             <div>
@@ -69,16 +68,8 @@
         <label>المبلغ المتبقي (جنيه):</label>
         <input type="number" id="remainingAmount" readonly style="background-color: #e9ecef;">
 
-        <!-- زر حفظ الطلب بالرابط المباشر للتطبيق -->
-        <button type="button" class="btn-success" onclick="sendInvoice()">📱 حفظ الطلب  </button>
+        <button type="button" class="btn-success" onclick="sendInvoiceToClient()">📱 حفظ الطلب وإرسال الفاتورة للعميل</button>
     </form>
-
-    <div class="vodafone-box">
-        <p>💳 رقم فودافون كاش للمحل: <span style="color: #e60000; font-size: 18px;">01014828660</span></p>
-        <p style="font-size: 12px; color: #666; font-weight: normal;">(برجاء تحويل المبلغ المقدم أو الكامل على هذا الرقم وإرسال لقطة شاشة للتحويل)</p>
-        <!-- زر فودافون كاش بالرابط المباشر للتطبيق لمنع خطأ الموبايل -->
-        <a href="whatsapp://send?phone=201014828660&text=أريد%20تأكيد%20تحويل%20فودافون%20كاش%20على%20الرقم%2001014828660" class="vodafone-btn">اضغط هنا لتأكيد الدفع عبر الواتساب</a>
-    </div>
 </div>
 
 <script>
@@ -88,8 +79,9 @@
         document.getElementById('remainingAmount').value = total - paid;
     }
 
-    function sendInvoice() {
+    function sendInvoiceToClient() {
         const name = document.getElementById('clientName').value;
+        let phone = document.getElementById('clientPhone').value.trim();
         const receiveDate = document.getElementById('receiveDate').value;
         const deliveryDate = document.getElementById('deliveryDate').value;
         const sneakers = document.getElementById('sneakersCount').value;
@@ -99,28 +91,27 @@
         const paid = document.getElementById('paidAmount').value;
         const remaining = document.getElementById('remainingAmount').value;
 
-        if(!name || !service || !total) {
-            alert("⚠️ برجاء ملء البيانات الأساسية (الاسم، الخدمة، الحساب) أولاً!");
+        if(!name || !phone || !service || !total) {
+            alert("⚠️ برجاء ملء البيانات الأساسية ورقم العميل أولاً!");
             return;
         }
 
+        if (phone.startsWith("0")) phone = "2" + phone;
+
+        // توليد رابط صفحة تتبع العميل على جيت هب وتمرير البيانات بداخل الرابط
+        const trackPageUrl = `https://github.io{encodeURIComponent(name)}&rec=${receiveDate}&del=${deliveryDate}&snk=${sneakers}&shs=${shoes}&srv=${encodeURIComponent(service)}&tot=${total}&paid=${paid}&rem=${remaining}`;
+
         const message = `✨ *طلب صيانة أحذية جديد* ✨\n\n` +
                         `👤 *اسم العميل:* ${name}\n` +
-                        `📅 *تاريخ الاستلام:* ${receiveDate}\n` +
-                        `📦 *تاريخ التسليم:* ${deliveryDate}\n\n` +
-                        `👟 *عدد الكوتشيات:* ${sneakers}\n` +
-                        `🥾 *عدد الجزم الكلاسيك:* ${shoes}\n` +
-                        `🛠️ *الخدمة المطلوبة:* ${service}\n\n` +
                         `💰 *الحساب الإجمالي:* ${total} جنيه\n` +
                         `💵 *المدفوع مقدمًا:* ${paid} جنيه\n` +
                         `🔴 *المبلغ المتبقي:* ${remaining} جنيه\n\n` +
-                        `💳 _تم التنسيق عبر نظام المحل الذكي_`;
+                        `🔗 *اضغط على الرابط التالي لمشاهدة وتتبع فاتورتك بالكامل:* \n${trackPageUrl}`;
 
         const encodedMessage = encodeURIComponent(message);
-        
-        // الرابط السحري المباشر لفتح محادثة الواتساب وتخطي حظر الموبايل تماماً
-        window.location.href = "whatsapp://send?phone=201014828660&text=" + encodedMessage;
+        window.location.href = "whatsapp://send?phone=" + phone + "&text=" + encodedMessage;
     }
 </script>
 </body>
 </html>
+
