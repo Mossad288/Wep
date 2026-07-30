@@ -6,14 +6,13 @@
     <title>إدارة طلبات محل الأحذية</title>
     <style>
         body { font-family: Arial, sans-serif; background-color: #f4f7f6; margin: 0; padding: 15px; }
-        .container { max-width: 100%; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .container { max-width: 100%; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); box-sizing: border-box; }
         h2 { text-align: center; color: #333; font-size: 20px; margin-bottom: 5px; }
         h4 { text-align: center; color: #666; margin-top: 0; font-size: 14px; }
         label { font-weight: bold; display: block; margin-top: 12px; font-size: 14px; }
         input { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px; }
         .row { display: flex; gap: 10px; }
         .row div { flex: 1; }
-        /* تعديل التصميم ليكون رابطاً صريحاً بشكل زر */
         .btn-success { width: 100%; background-color: #25D366; color: white; padding: 14px; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; box-sizing: border-box; }
         .btn-success:hover { background-color: #1ebd57; }
         .vodafone-box { background-color: #fff5f5; border: 2px dashed #e60000; padding: 12px; border-radius: 5px; margin-top: 15px; text-align: center; }
@@ -24,7 +23,7 @@
 <body>
 
 <div class="container">
-    <h2>👟 نظام إدارة طلبات المحل 🥾</h2>
+    <h2>👟 El Eskafy Shose  🥾</h2>
     <h4>تسجيل الطلب وإرساله للواتساب تلقائياً</h4>
     
     <form id="orderForm">
@@ -59,51 +58,52 @@
         <div class="row">
             <div>
                 <label>الحساب الإجمالي (جنيه):</label>
-                <input type="number" id="totalAmount" required oninput="updateWhatsAppLink()">
+                <input type="number" id="totalAmount" required oninput="calculateRemaining()">
             </div>
             <div>
                 <label>المدفوع مقدمًا (جنيه):</label>
-                <input type="number" id="paidAmount" required oninput="updateWhatsAppLink()">
+                <input type="number" id="paidAmount" required oninput="calculateRemaining()">
             </div>
         </div>
 
         <label>المبلغ المتبقي (جنيه):</label>
         <input type="number" id="remainingAmount" readonly style="background-color: #e9ecef;">
 
-        <!-- هنا تم تغيير الزر ليصبح رابطاً صريحاً يقرأ البيانات مباشرة دون حظر المتصفح -->
-        <a id="whatsappLink" href="#" class="btn-success">📱 حفظ الطلب وإرساله للواتساب</a>
+        <!-- زر حفظ الطلب بالرابط المباشر للتطبيق -->
+        <button type="button" class="btn-success" onclick="sendInvoice()">📱 حفظ الطلب  </button>
     </form>
 
     <div class="vodafone-box">
         <p>💳 رقم فودافون كاش للمحل: <span style="color: #e60000; font-size: 18px;">01014828660</span></p>
         <p style="font-size: 12px; color: #666; font-weight: normal;">(برجاء تحويل المبلغ المقدم أو الكامل على هذا الرقم وإرسال لقطة شاشة للتحويل)</p>
-        <a href="https://wa.me" target="_blank" class="vodafone-btn">اضغط هنا لتأكيد الدفع عبر الواتساب</a>
+        <!-- زر فودافون كاش بالرابط المباشر للتطبيق لمنع خطأ الموبايل -->
+        <a href="whatsapp://send?phone=201014828660&text=أريد%20تأكيد%20تحويل%20فودافون%20كاش%20على%20الرقم%2001014828660" class="vodafone-btn">اضغط هنا لتأكيد الدفع عبر الواتساب</a>
     </div>
 </div>
 
 <script>
-    // ربط الحقول بدوال التحديث التلقائي للرابط
-    document.getElementById('clientName').addEventListener('input', updateWhatsAppLink);
-    document.getElementById('receiveDate').addEventListener('change', updateWhatsAppLink);
-    document.getElementById('deliveryDate').addEventListener('change', updateWhatsAppLink);
-    document.getElementById('sneakersCount').addEventListener('input', updateWhatsAppLink);
-    document.getElementById('shoesCount').addEventListener('input', updateWhatsAppLink);
-    document.getElementById('serviceType').addEventListener('input', updateWhatsAppLink);
-
-    function updateWhatsAppLink() {
+    function calculateRemaining() {
         const total = parseFloat(document.getElementById('totalAmount').value) || 0;
         const paid = parseFloat(document.getElementById('paidAmount').value) || 0;
-        const remaining = total - paid;
-        document.getElementById('remainingAmount').value = remaining;
+        document.getElementById('remainingAmount').value = total - paid;
+    }
 
-        const name = document.getElementById('clientName').value || "لم يحدد";
-        const receiveDate = document.getElementById('receiveDate').value || "لم يحدد";
-        const deliveryDate = document.getElementById('deliveryDate').value || "لم يحدد";
-        const sneakers = document.getElementById('sneakersCount').value || "0";
-        const shoes = document.getElementById('shoesCount').value || "0";
-        const service = document.getElementById('serviceType').value || "لم يحدد";
+    function sendInvoice() {
+        const name = document.getElementById('clientName').value;
+        const receiveDate = document.getElementById('receiveDate').value;
+        const deliveryDate = document.getElementById('deliveryDate').value;
+        const sneakers = document.getElementById('sneakersCount').value;
+        const shoes = document.getElementById('shoesCount').value;
+        const service = document.getElementById('serviceType').value;
+        const total = document.getElementById('totalAmount').value;
+        const paid = document.getElementById('paidAmount').value;
+        const remaining = document.getElementById('remainingAmount').value;
 
-        // تجهيز نص الفاتورة
+        if(!name || !service || !total) {
+            alert("⚠️ برجاء ملء البيانات الأساسية (الاسم، الخدمة، الحساب) أولاً!");
+            return;
+        }
+
         const message = `✨ *طلب صيانة أحذية جديد* ✨\n\n` +
                         `👤 *اسم العميل:* ${name}\n` +
                         `📅 *تاريخ الاستلام:* ${receiveDate}\n` +
@@ -118,12 +118,9 @@
 
         const encodedMessage = encodeURIComponent(message);
         
-        // تحديث الرابط الأخضر بشكل لحظي مع كل حرف يكتبه المستخدم
-        document.getElementById('whatsappLink').href = "https://wa.me" + encodedMessage;
+        // الرابط السحري المباشر لفتح محادثة الواتساب وتخطي حظر الموبايل تماماً
+        window.location.href = "whatsapp://send?phone=201014828660&text=" + encodedMessage;
     }
-
-    // تشغيل الدالة مرة واحدة في البداية لتجهيز الرابط الافتراضي
-    updateWhatsAppLink();
 </script>
 </body>
 </html>
