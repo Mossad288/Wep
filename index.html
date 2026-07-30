@@ -13,15 +13,10 @@
         .badge { background: #f59e0b; color: #000; font-weight: bold; padding: 4px 10px; border-radius: 15px; display: inline-block; margin: 5px 0; font-size: 12px; }
         label { display: block; margin-top: 10px; font-size: 13px; color: #ccc; }
         input { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #334155; border-radius: 6px; background: #1f2937; color: #fff; box-sizing: border-box; }
-        .row-3 { display: flex; gap: 8px; } .row-3 div { flex: 1; }
+        .row { display: flex; gap: 10px; } .row div { flex: 1; }
         .btn { width: 100%; color: #fff; padding: 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; box-sizing: border-box; }
-        .qr-box { background: #1f2937; padding: 15px; border-radius: 8px; margin-top: 15px; text-align: center; border: 1px dashed #f59e0b; }
-        .qr-box p { margin: 0 0 10px 0; font-size: 13px; font-weight: bold; color: #f59e0b; }
-        /* جعل صندوق الباركود الجديد يظهر بوضوح في المنتصف */
-        #qrcode { background: white; padding: 10px; border-radius: 6px; display: inline-block; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .btn-fb { background: #1877f2; color: #fff; font-size: 15px; box-shadow: 0 4px 12px rgba(24, 119, 242, 0.3); margin-top: 15px; }
     </style>
-    <!-- مكتبة توليد الباركود المحلية والمضمونة لعدم الحظر -->
-    <script src="https://cloudflare.com"></script>
 </head>
 <body>
 
@@ -40,23 +35,19 @@
     <form>
         <label>👤 اسم العميل:</label><input type="text" id="name" placeholder="اسم العميل">
         <label>📱 واتساب العميل:</label><input type="tel" id="phone" placeholder="01012345678">
-        
-        <div class="row-3" style="display:flex; gap:10px;">
-            <div style="flex:1;"><label>📅 الاستلام:</label><input type="date" id="rDate"></div>
-            <div style="flex:1;"><label>📦 التسليم:</label><input type="date" id="dDate"></div>
+        <div class="row">
+            <div><label>📅 تاريخ الاستلام:</label><input type="date" id="rDate"></div>
+            <div><label>📦 تاريخ التسليم:</label><input type="date" id="dDate"></div>
         </div>
-        
-        <div class="row-3">
+        <div class="row">
             <div><label>👟 كوتشيات:</label><input type="number" id="snk" value="0"></div>
             <div><label>🥾 جزم:</label><input type="number" id="shs" value="0"></div>
             <div><label>💼 شنط:</label><input type="number" id="bags" value="0"></div>
         </div>
-        
-        <label>🛠️ الخدمة المطلوبة:</label><input type="text" id="srv" placeholder="غسيل، صيانة شنطة، خياطة">
-        
-        <div class="row-3" style="display:flex; gap:10px;">
-            <div style="flex:1;"><label>💰 الحساب الكلي:</label><input type="number" id="tot" oninput="calc()"></div>
-            <div style="flex:1;"><label>💵 المدفوع مقدمًا:</label><input type="number" id="paid" oninput="calc()"></div>
+        <label>🛠️ الخدمة المطلوبة:</label><input type="text" id="srv" placeholder="غسيل، خياطة">
+        <div class="row">
+            <div><label>💰 الحساب الكلي:</label><input type="number" id="tot" oninput="calc()"></div>
+            <div><label>💵 المدفوع مقدمًا:</label><input type="number" id="paid" oninput="calc()"></div>
         </div>
         <label>🔴 المبلغ المتبقي:</label><input type="number" id="rem" readonly style="color:#ef4444; font-weight:bold; background:#111827;">
         
@@ -64,38 +55,20 @@
         <button type="button" class="btn" style="background:#3b82f6;" onclick="save('owner')">📋 2. إرسال للمحل</button>
         <button type="button" class="btn" style="background:#f59e0b; color:#000;" onclick="rep()">📊 تحميل التقرير اليومي</button>
         
-        <!-- صندوق الباركود المطور محلياً -->
-        <div class="qr-box">
-            <p>📱 سكان للباركود لمتابعة صفحة الفيسبوك للمحل</p>
-            <div id="qrcode"></div>
-        </div>
+        <!-- زر السوشيال ميديا الجديد المباشر لصفحة الفيسبوك الخاصة بكم -->
+        <a href="https://facebook.com" target="_blank" class="btn btn-fb"> السوشيال ميديا لمركزنا </a>
     </form>
 </div>
 
 <script>
-    var FACEBOOK_PAGE_URL = "https://facebook.com";
     var OWNER_PHONE = "201090274601"; 
-
     var lastSavedName = "";
-    
-    // دالة التوليد المحلية المصلحة تماماً لمنع المربع الأبيض
-    function generateFacebookQR() {
-        document.getElementById("qrcode").innerHTML = ""; // تنظيف الصندوق أولاً
-        new QRCode(document.getElementById("qrcode"), {
-            text: FACEBOOK_PAGE_URL,
-            width: 130,
-            height: 130,
-            colorDark : "#000000",
-            colorLight : "#ffffff",
-            correctLevel : QRCode.CorrectLevel.H
-        });
-    }
 
     function checkPassword() {
         if (document.getElementById('passInput').value === '2020') {
             document.getElementById('lockScreen').style.display = 'none';
             document.getElementById('mainApp').style.display = 'block';
-            resetCheck(); updateNum(); generateFacebookQR(); 
+            resetCheck(); updateNum();
         } else {
             alert("❌ رمز الدخول السري خاطئ!");
             document.getElementById('passInput').value = "";
