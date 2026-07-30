@@ -45,7 +45,9 @@
     </form>
 </div>
 <script>
+    var lastSavedName = ""; 
     resetCheck(); updateNum();
+    
     function calc() {
         var t = parseFloat(document.getElementById('tot').value) || 0;
         var p = parseFloat(document.getElementById('paid').value) || 0;
@@ -65,15 +67,21 @@
         if(!n || !t || (m==='client' && !ph)) { alert("املا البيانات الأساسية!"); return; }
         resetCheck();
         var r = document.getElementById('rDate').value, d = document.getElementById('dDate').value, sk = document.getElementById('snk').value, ss = document.getElementById('shs').value, sv = document.getElementById('srv').value, p = document.getElementById('paid').value, rm = document.getElementById('rem').value, c = localStorage.getItem('cnt') || '1';
-        var obj = { id: c, name: n, total: parseFloat(t)||0, paid: parseFloat(p)||0, rem: parseFloat(rm)||0 };
+        
         var list = JSON.parse(localStorage.getItem('list')) || [];
-        if (!list.some(function(x){return x.id===c && x.name===n;})) {
-            list.push(obj); localStorage.setItem('list', JSON.stringify(list));
-            localStorage.setItem('cnt', (parseInt(c)+1).toString()); updateNum();
+        
+        if (n !== lastSavedName) {
+            var obj = { id: c, name: n, total: parseFloat(t)||0, paid: parseFloat(p)||0, rem: parseFloat(rm)||0 };
+            list.push(obj); 
+            localStorage.setItem('list', JSON.stringify(list));
+            lastSavedName = n; 
+        } else {
+            c = (parseInt(c) - 1).toString();
+            if(c === "0") c = "1";
         }
+
         if (m === 'client') {
             if (ph.startsWith("0")) ph = "2" + ph;
-            // إصلاح الرابط كاملاً ليكون شغالاً وموجهاً لصفحة track الفردية للزبون
             var url = "https://github.io" + encodeURIComponent(n) + "&rec=" + r + "&del=" + d + "&snk=" + sk + "&shs=" + ss + "&srv=" + encodeURIComponent(sv) + "&tot=" + t + "&paid=" + p + "&rem=" + rm;
             
             var msg = `✨ *ALESKAFY SHOES* ✨\n` +
@@ -89,9 +97,12 @@
                       `🔴 *المبلغ المتبقي:* ${rm} جنيه\n\n` +
                       `🔗 *رابط تتبع الفاتورة والتحويل:* \n${url}`;
                       
+            if(lastSavedName === n) {
+                localStorage.setItem('cnt', (parseInt(c)+1).toString());
+                updateNum();
+            }
             window.location.href = "whatsapp://send?phone="+ph+"&text="+encodeURIComponent(msg);
         } else {
-            // نسخة المحل خالية تماماً من الروابط لتقليل زحمة الأرشيف
             var oMsg = `📥 *[ALESKAFY SHOES - نسخة المحل]*\n` +
                        `🧾 *أرشيف فاتورة اليوم رقم (#${c})*\n\n` +
                        `👤 *اسم العميل:* ${n}\n` +
@@ -104,6 +115,10 @@
                        `💵 *المدفوع مقدمًا:* ${p} جنيه\n` +
                        `🔴 *المبلغ المتبقي:* ${rm} جنيه`;
                        
+            if(lastSavedName === n) {
+                localStorage.setItem('cnt', (parseInt(c)+1).toString());
+                updateNum();
+            }
             window.location.href = "whatsapp://send?phone=201014828660&text="+encodeURIComponent(oMsg);
         }
     }
@@ -123,9 +138,3 @@
 </script>
 </body>
 </html>
-
-
-
-
-
-
