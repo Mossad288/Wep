@@ -3,73 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة إدارة طلبات المحل</title>
+    <title>ALESKAFY SHOES - لوحة التحكم</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f7f6; margin: 0; padding: 15px; }
-        .container { max-width: 100%; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); box-sizing: border-box; }
-        h2 { text-align: center; color: #333; font-size: 20px; margin-bottom: 5px; }
-        h4 { text-align: center; color: #666; margin-top: 0; font-size: 14px; }
-        label { font-weight: bold; display: block; margin-top: 12px; font-size: 14px; }
-        input { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px; }
-        .row { display: flex; gap: 10px; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #070a13 0%, #110e2e 100%);
+            background-attachment: fixed;
+            margin: 0; 
+            padding: 15px; 
+            color: #f1f5f9;
+            position: relative;
+            overflow-x: hidden;
+        }
+        /* خلفية مدمجة بماركات الجزم العالمية الفخمة */
+        body::before {
+            content: "NIKE • ADIDAS • PUMA • JORDAN • GUCCI • PRADA • TIMBERLAND • VERSACE";
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-15deg);
+            font-size: 36px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 15px;
+            color: rgba(255, 255, 255, 0.02); /* تأثير شفاف مدمج ورايق */
+            width: 200%;
+            text-align: center;
+            line-height: 150px;
+            pointer-events: none;
+            z-index: -1;
+        }
+        .container { 
+            max-width: 500px; 
+            background: rgba(15, 23, 42, 0.85); 
+            padding: 25px; 
+            border-radius: 16px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+            box-sizing: border-box;
+            margin: auto;
+            border: 1px solid rgba(245, 158, 11, 0.15); /* إطار ذهبي خفيف */
+            backdrop-filter: blur(10px);
+        }
+        .brand-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .brand-title {
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #f59e0b; 
+            margin: 0;
+            text-shadow: 0 2px 10px rgba(245, 158, 11, 0.3);
+        }
+        .brand-sub {
+            font-size: 13px;
+            color: #94a3b8;
+            margin-top: 5px;
+            letter-spacing: 1px;
+        }
+        label { font-weight: 600; display: block; margin-top: 14px; font-size: 13px; color: #cbd5e1; }
+        input { 
+            width: 100%; 
+            padding: 12px; 
+            margin-top: 6px; 
+            border: 1px solid #334155; 
+            border-radius: 8px; 
+            box-sizing: border-box; 
+            font-size: 15px; 
+            background: #1e293b; 
+            color: white;
+            transition: all 0.3s;
+        }
+        input:focus { border-color: #f59e0b; outline: none; box-shadow: 0 0 8px rgba(245, 158, 11, 0.2); }
+        .row { display: flex; gap: 12px; }
         .row div { flex: 1; }
-        .btn-client { width: 100%; background-color: #25D366; color: white; padding: 14px; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; box-sizing: border-box; }
-        .btn-client:hover { background-color: #1ebd57; }
-        .btn-owner { width: 100%; background-color: #007bff; color: white; padding: 14px; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; box-sizing: border-box; }
-        .btn-owner:hover { background-color: #0056b3; }
+        .btn-client { width: 100%; background: linear-gradient(90deg, #22c55e, #16a34a); color: white; padding: 14px; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; margin-top: 20px; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3); }
+        .btn-owner { width: 100%; background: linear-gradient(90deg, #3b82f6, #2563eb); color: white; padding: 14px; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; margin-top: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>👟 نظام إدارة طلبات المحل 🥾</h2>
-    <h4>تسجيل الطلب وإرساله بأزرار منفصلة</h4>
+    <div class="brand-header">
+        <h1 class="brand-title">ALESKAFY SHOES</h1>
+        <div class="brand-sub">Premium Footwear Care & Repair</div>
+    </div>
     
     <form id="orderForm">
-        <label>اسم العميل:</label>
+        <label>👤 اسم العميل:</label>
         <input type="text" id="clientName" required placeholder="اسم العميل ثلاثي">
 
-        <label>رقم واتساب العميل:</label>
+        <label>📱 رقم واتساب العميل:</label>
         <input type="tel" id="clientPhone" required placeholder="مثال: 01012345678">
 
         <div class="row">
             <div>
-                <label>تاريخ الاستلام:</label>
+                <label>📅 تاريخ الاستلام:</label>
                 <input type="date" id="receiveDate" required>
             </div>
             <div>
-                <label>تاريخ التسليم:</label>
+                <label>📦 ميعاد التسليم المتوقع:</label>
                 <input type="date" id="deliveryDate" required>
             </div>
         </div>
 
         <div class="row">
             <div>
-                <label>عدد الكوتشيات:</label>
+                <label>👟 عدد الكوتشيات:</label>
                 <input type="number" id="sneakersCount" value="0" min="0">
             </div>
             <div>
-                <label>عدد الجزم الكلاسيك:</label>
+                <label>🥾 عدد الجزم الكلاسيك:</label>
                 <input type="number" id="shoesCount" value="0" min="0">
             </div>
         </div>
 
-        <label>العمل المطلوب (ما الذي سيتم عمله؟):</label>
+        <label>🛠️ العمل المطلوب (ما الذي سيتم عمله؟):</label>
         <input type="text" id="serviceType" required placeholder="مثال: غسيل وتجديد نعل، خياطة">
 
         <div class="row">
             <div>
-                <label>الحساب الإجمالي (جنيه):</label>
+                <label>💰 الحساب الإجمالي (جنيه):</label>
                 <input type="number" id="totalAmount" required oninput="calculateRemaining()">
             </div>
             <div>
-                <label>المدفوع مقدمًا (جنيه):</label>
+                <label>💵 المدفوع مقدمًا (جنيه):</label>
                 <input type="number" id="paidAmount" required oninput="calculateRemaining()">
             </div>
         </div>
 
-        <label>المبلغ المتبقي (جنيه):</label>
-        <input type="number" id="remainingAmount" readonly style="background-color: #e9ecef;">
+        <label>🔴 المبلغ المتبقي (جنيه):</label>
+        <input type="number" id="remainingAmount" readonly style="background-color: #334155; color: #ef4444; font-weight: bold;">
 
         <button type="button" class="btn-client" onclick="sendToClient()">📱 1. إرسال الفاتورة للعميل</button>
         <button type="button" class="btn-owner" onclick="sendToOwner()">📋 2. إرسال نسخة وتأكيد للمحل</button>
@@ -83,7 +148,6 @@
         document.getElementById('remainingAmount').value = total - paid;
     }
 
-    // دالة لتجميع البيانات الأساسية المشتركة بين الرسالتين
     function getBaseData() {
         return {
             name: document.getElementById('clientName').value,
@@ -98,7 +162,6 @@
         };
     }
 
-    // 1. إرسال للعميل (يحتوي على رابط التتبع)
     function sendToClient() {
         let phone = document.getElementById('clientPhone').value.trim();
         if(!phone || !document.getElementById('clientName').value) {
@@ -109,7 +172,6 @@
 
         const d = getBaseData();
 
-        // توليد الرابط المخصص للعميل فقط
         const trackPageUrl = "https://github.io" + encodeURIComponent(d.name) +
                              "&rec=" + d.receiveDate +
                              "&del=" + d.deliveryDate +
@@ -120,22 +182,17 @@
                              "&paid=" + d.paid +
                              "&rem=" + d.remaining;
 
-        const clientMessage = `✨ *طلب صيانة أحذية جديد* ✨\n\n` +
+        const clientMessage = `✨ *ALESKAFY SHOES* ✨\n` +
+                              `📋 *فاتورة حجز وإصلاح أحذية رقمية*\n\n` +
                               `👤 *اسم العميل:* ${d.name}\n` +
-                              `📅 *تاريخ الاستلام:* ${d.receiveDate}\n` +
-                              `📦 *تاريخ التسليم المتوقع:* ${d.deliveryDate}\n\n` +
-                              `👟 *عدد الكوتشيات:* ${d.sneakers}\n` +
-                              `🥾 *عدد الجزم الكلاسيك:* ${d.shoes}\n` +
-                              `🛠️ *الخدمة المطلوبة:* ${d.service}\n\n` +
                               `💰 *الحساب الإجمالي:* ${d.total} جنيه\n` +
                               `💵 *المدفوع مقدمًا:* ${d.paid} جنيه\n` +
                               `🔴 *المبلغ المتبقي:* ${d.remaining} جنيه\n\n` +
-                              `🔗 *رابط تتبع الفاتورة والتحويل:* \n` + trackPageUrl;
+                              `🔗 *اضغط على الرابط لمشاهدة وتتبع فاتورتك بالكامل وميعاد الاستلام الشيك:* \n` + trackPageUrl;
 
         window.location.href = "whatsapp://send?phone=" + phone + "&text=" + encodeURIComponent(clientMessage);
     }
 
-    // 2. إرسال لك أنت كصاحب محل (بيانات فقط بدون رابط)
     function sendToOwner() {
         if(!document.getElementById('clientName').value || !document.getElementById('totalAmount').value) {
             alert("⚠️ برجاء ملء البيانات الأساسية أولاً!");
@@ -144,24 +201,20 @@
         const myPhone = "201014828660"; 
         const d = getBaseData();
 
-        // صياغة الرسالة الخاصة بك بدون تضمين أي روابط
-        const ownerMessage = `📥 *[نسخة المحل للتأكيد والأرشفة]*\n\n` +
-                             `✨ *طلب صيانة أحذية جديد* ✨\n\n` +
-                             `👤 *اسم العميل:* ${d.name}\n` +
-                             `📅 *تاريخ الاستلام:* ${d.receiveDate}\n` +
-                             `📦 *تاريخ التسليم المتوقع:* ${d.deliveryDate}\n\n` +
-                             `👟 *عدد الكوتشيات:* ${d.sneakers}\n` +
-                             `🥾 *عدد الجزم الكلاسيك:* ${d.shoes}\n` +
-                             `🛠️ *الخدمة المطلوبة:* ${d.service}\n\n` +
-                             `💰 *الحساب الإجمالي:* ${d.total} جنيه\n` +
-                             `💵 *المدفوع مقدمًا:* ${d.paid} جنيه\n` +
-                             `🔴 *المبلغ المتبقي:* ${d.remaining} جنيه`;
+        const ownerMessage = `📥 *[ALESKAFY SHOES - أرشيف المحل]*\n\n` +
+                             `👤 *العميل:* ${d.name}\n` +
+                             `📅 *الاستلام:* ${d.receiveDate} | *التسليم:* ${d.deliveryDate}\n` +
+                             `👟 *كوتشيات:* ${d.sneakers} | *جزم:* ${d.shoes}\n` +
+                             `🛠️ *العمل:* ${d.service}\n` +
+                             `💰 *الإجمالي:* ${d.total} جنيه | *المدفوع:* ${d.paid} جنيه\n` +
+                             `🔴 *المتبقي للتحصيل:* ${d.remaining} جنيه`;
         
         window.location.href = "whatsapp://send?phone=" + myPhone + "&text=" + encodeURIComponent(ownerMessage);
     }
 </script>
 </body>
 </html>
+
 
 
 
