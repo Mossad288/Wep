@@ -119,10 +119,19 @@
             txt += "فاتورة #"+x.id+" - العميل: "+x.name+"\nالحساب: "+x.total+" ج | المدفوع: "+x.paid+" ج | الباقي: "+x.rem+" ج\n--------------------\n"; t+=x.total; p+=x.paid; r+=x.rem;
         });
         txt += "\n====================\n💰 إجمالي اليوم: "+t+" ج\n💵 إجمالي الخزنة: "+p+" ج\n🔴 إجمالي المتبقي: "+r+" ج";
-        var b = new Blob([txt], { type: 'text/plain;charset=utf-8' }); var lnk = document.createElement('a');
-        lnk.href = URL.createObjectURL(b); lnk.download = "Report_" + new Date().toISOString().slice(0,10) + ".txt";
-        document.body.appendChild(lnk); lnk.click(); document.body.removeChild(lnk);
-    }
+        var b = new Blob(
+    ["\uFEFF" + txt],
+    { type: "text/plain;charset=utf-8" }
+);
+
+var lnk = document.createElement('a');
+lnk.href = URL.createObjectURL(b);
+lnk.download = "Report_" + new Date().toISOString().slice(0,10) + ".txt";
+document.body.appendChild(lnk);
+lnk.click();
+document.body.removeChild(lnk);
+URL.revokeObjectURL(lnk.href);
+}
 </script>
 </body>
 </html>
