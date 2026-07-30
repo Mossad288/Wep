@@ -3,196 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALESKAFY SHOES - لوحة التحكم المالية</title>
+    <title>ALESKAFY SHOES</title>
     <style>
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background-color: #070a13;
-            background-image: linear-gradient(135deg, rgba(7, 10, 19, 0.88) 0%, rgba(17, 14, 46, 0.88) 100%), 
-                              url('https://transparenttextures.com');
-            background-attachment: fixed;
-            margin: 0; padding: 15px; color: #f1f5f9; position: relative;
-            min-height: 100vh; display: flex; align-items: center; justify-content: center; box-sizing: border-box;
-        }
-        .brands-watermark {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.12; 
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; padding: 30px; box-sizing: border-box; 
-            font-size: 14px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; pointer-events: none; user-select: none;
-        }
-        .brands-watermark div { transform: rotate(-15deg); text-align: center; }
-        .container { 
-            width: 100%; max-width: 450px; background: rgba(15, 23, 42, 0.55); padding: 25px; border-radius: 16px; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.6); box-sizing: border-box; border: 1px solid rgba(245, 158, 11, 0.25); 
-            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-        }
-        .brand-header { text-align: center; margin-bottom: 20px; }
-        .brand-title { font-size: 26px; font-weight: 800; color: #f59e0b; margin: 0; text-shadow: 0 2px 10px rgba(245, 158, 11, 0.3); }
-        .brand-sub { font-size: 13px; color: #94a3b8; margin-top: 5px; }
-        .order-badge { background: #f59e0b; color: #070a13; font-weight: bold; padding: 4px 12px; border-radius: 20px; display: inline-block; margin-top: 8px; font-size: 13px; }
-        label { font-weight: 600; display: block; margin-top: 14px; font-size: 13px; color: #cbd5e1; }
-        input { 
-            width: 100%; padding: 12px; margin-top: 6px; border: 1px solid rgba(51, 65, 85, 0.6); border-radius: 8px; 
-            box-sizing: border-box; font-size: 15px; background: rgba(30, 41, 59, 0.7); color: white; transition: all 0.3s;
-        }
-        input:focus { border-color: #f59e0b; outline: none; box-shadow: 0 0 8px rgba(245, 158, 11, 0.2); }
-        .row { display: flex; gap: 12px; }
-        .row div { flex: 1; }
-        .btn-client { width: 100%; background: linear-gradient(90deg, #22c55e, #16a34a); color: white; padding: 14px; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; margin-top: 20px; box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3); }
-        .btn-owner { width: 100%; background: linear-gradient(90deg, #3b82f6, #2563eb); color: white; padding: 14px; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; margin-top: 10px; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); }
-        .btn-report { width: 100%; background: linear-gradient(90deg, #f59e0b, #d97706); color: #070a13; padding: 14px; border: none; border-radius: 8px; font-size: 15px; font-weight: 800; cursor: pointer; margin-top: 15px; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3); }
+        body { font-family: sans-serif; background: #070a13; margin: 0; padding: 15px; color: #fff; display: flex; align-items: center; justify-content: center; min-height: 100vh; box-sizing: border-box; }
+        .container { width: 100%; max-width: 430px; background: rgba(15,23,42,0.6); padding: 20px; border-radius: 12px; border: 1px solid #f59e0b; backdrop-filter: blur(10px); }
+        h1 { text-align: center; color: #f59e0b; margin: 0; font-size: 24px; }
+        .badge { background: #f59e0b; color: #000; font-weight: bold; padding: 4px 10px; border-radius: 15px; display: inline-block; margin: 5px 0; font-size: 12px; }
+        label { display: block; margin-top: 10px; font-size: 13px; color: #ccc; }
+        input { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #334155; border-radius: 6px; background: rgba(30,41,59,0.7); color: #fff; box-sizing: border-box; }
+        .row { display: flex; gap: 10px; } .row div { flex: 1; }
+        .btn { width: 100%; color: #fff; padding: 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; }
     </style>
 </head>
 <body>
-
-<div class="brands-watermark">
-    <div>NIKE</div><div>ADIDAS</div><div>PUMA</div>
-    <div>JORDAN</div><div>GUCCI</div><div>PRADA</div>
-    <div>TIMBERLAND</div><div>VERSACE</div><div>NIKE</div>
-</div>
-
 <div class="container">
-    <div class="brand-header">
-        <h1 class="brand-title">ALESKAFY SHOES</h1>
-        <div class="brand-sub">Premium Footwear Care & Repair</div>
-        <span class="order-badge" id="currentOrderBadge">فاتورة رقم: #1</span>
+    <div style="text-align:center;">
+        <h1>ALESKAFY SHOES</h1>
+        <span class="badge" id="badge">فاتورة رقم: #1</span>
     </div>
-    
-    <form id="orderForm">
-        <label>👤 اسم العميل:</label>
-        <input type="text" id="clientName" required placeholder="اسم العميل ثلاثي">
-
-        <label>📱 رقم واتساب العميل:</label>
-        <input type="tel" id="clientPhone" required placeholder="مثال: 01012345678">
-
+    <form>
+        <label>👤 اسم العميل:</label><input type="text" id="name" placeholder="اسم العميل">
+        <label>📱 واتساب العميل:</label><input type="tel" id="phone" placeholder="01012345678">
         <div class="row">
-            <div>
-                <label>📅 تاريخ الاستلام:</label>
-                <input type="date" id="receiveDate" required>
-            </div>
-            <div>
-                <label>📦 ميعاد التسليم المتوقع:</label>
-                <input type="date" id="deliveryDate" required>
-            </div>
+            <div><label>📅 تاريخ الاستلام:</label><input type="date" id="rDate"></div>
+            <div><label>📦 تاريخ التسليم:</label><input type="date" id="dDate"></div>
         </div>
-
         <div class="row">
-            <div>
-                <label>👟 عدد الكوتشيات:</label>
-                <input type="number" id="sneakersCount" value="0" min="0">
-            </div>
-            <div>
-                <label>🥾 عدد الجزم الكلاسيك:</label>
-                <input type="number" id="shoesCount" value="0" min="0">
-            </div>
+            <div><label>👟 كوتشيات:</label><input type="number" id="snk" value="0"></div>
+            <div><label>🥾 جزم:</label><input type="number" id="shs" value="0"></div>
         </div>
-
-        <label>🛠️ العمل المطلوب (ما الذي سيتم عمله؟):</label>
-        <input type="text" id="serviceType" required placeholder="مثال: غسيل وتجديد نعل، خياطة">
-
+        <label>🛠️ الخدمة المطلوبة:</label><input type="text" id="srv" placeholder="غسيل، خياطة">
         <div class="row">
-            <div>
-                <label>💰 الحساب الإجمالي (جنيه):</label>
-                <input type="number" id="totalAmount" required oninput="calculateRemaining()">
-            </div>
-            <div>
-                <label>💵 المدفوع مقدمًا (جنيه):</label>
-                <input type="number" id="paidAmount" required oninput="calculateRemaining()">
-            </div>
+            <div><label>💰 الحساب الكلي:</label><input type="number" id="tot" oninput="calc()"></div>
+            <div><label>💵 المدفوع مقدمًا:</label><input type="number" id="paid" oninput="calc()"></div>
         </div>
-
-        <label>🔴 المبلغ المتبقي (جنيه):</label>
-        <input type="number" id="remainingAmount" readonly style="background-color: rgba(51, 65, 85, 0.8); color: #ef4444; font-weight: bold;">
-
-        <button type="button" class="btn-client" onclick="processOrder('client')">📱 1. إرسال الفاتورة للعميل</button>
-        <button type="button" class="btn-owner" onclick="processOrder('owner')">📋 2. إرسال نسخة وتأكيد للمحل</button>
-        <button type="button" class="btn-report" onclick="downloadDailyReport()">📊 تحميل شيت الحسابات والتقرير اليومي</button>
+        <label>🔴 المبلغ المتبقي:</label><input type="number" id="rem" readonly style="color:#ef4444; font-weight:bold;">
+        
+        <button type="button" class="btn" style="background:#22c55e; margin-top:15px;" onclick="save('client')">📱 1. إرسال للعميل</button>
+        <button type="button" class="btn" style="background:#3b82f6;" onclick="save('owner')">📋 2. إرسال للمحل</button>
+        <button type="button" class="btn" style="background:#f59e0b; color:#000;" onclick="rep()">📊 تحميل التقرير اليومي</button>
     </form>
 </div>
-
 <script>
-    // تشغيل الإعدادات الأساسية فور فتح الصفحة
-    checkDailyReset();
-    updateBadge();
-
-    // دالة حساب المتبقي المصلحة واللحظية
-    function calculateRemaining() {
-        var total = parseFloat(document.getElementById('totalAmount').value) || 0;
-        var paid = parseFloat(document.getElementById('paidAmount').value) || 0;
-        document.getElementById('remainingAmount').value = total - paid;
+    resetCheck(); updateNum();
+    function calc() {
+        var t = parseFloat(document.getElementById('tot').value) || 0;
+        var p = parseFloat(document.getElementById('paid').value) || 0;
+        document.getElementById('rem').value = t - p;
     }
-
-    function checkDailyReset() {
-        var startTime = localStorage.getItem('day_start_time');
-        var now = new Date().getTime();
-        if (!startTime) {
-            localStorage.setItem('day_start_time', now);
-            localStorage.setItem('order_counter', '1');
-            localStorage.setItem('daily_orders_list', JSON.stringify([]));
+    function resetCheck() {
+        var s = localStorage.getItem('day_s'); var n = new Date().getTime();
+        if (!s || (n - parseInt(s) >= 86400000)) {
+            localStorage.setItem('day_s', n); localStorage.setItem('cnt', '1'); localStorage.setItem('list', JSON.stringify([]));
+        }
+    }
+    function updateNum() {
+        document.getElementById('badge').innerText = "فاتورة اليوم رقم: #" + (localStorage.getItem('cnt') || '1');
+    }
+    function save(m) {
+        var n = document.getElementById('name').value; var t = document.getElementById('tot').value; var ph = document.getElementById('phone').value.trim();
+        if(!n || !t || (m==='client' && !ph)) { alert("املا البيانات الأساسية!"); return; }
+        resetCheck();
+        var r = document.getElementById('rDate').value, d = document.getElementById('dDate').value, sk = document.getElementById('snk').value, ss = document.getElementById('shs').value, sv = document.getElementById('srv').value, p = document.getElementById('paid').value, rm = document.getElementById('rem').value, c = localStorage.getItem('cnt') || '1';
+        var obj = { id: c, name: n, total: parseFloat(t)||0, paid: parseFloat(p)||0, rem: parseFloat(rm)||0 };
+        var list = JSON.parse(localStorage.getItem('list')) || [];
+        if (!list.some(function(x){return x.id===c && x.name===n;})) {
+            list.push(obj); localStorage.setItem('list', JSON.stringify(list));
+            localStorage.setItem('cnt', (parseInt(c)+1).toString()); updateNum();
+        }
+        if (m === 'client') {
+            if (ph.startsWith("0")) ph = "2" + ph;
+            var url = "https://github.io"+encodeURIComponent(n)+"&rec="+r+"&del="+d+"&snk="+sk+"&shs="+ss+"&srv="+encodeURIComponent(sv)+"&tot="+t+"&paid="+p+"&rem="+rm;
+            var msg = "✨ *ALESKAFY SHOES* ✨\n🧾 *فاتورة رقم:* #"+c+"\n👤 *العميل:* "+n+"\n💰 *الإجمالي:* "+t+" ج\n💵 *المدفوع:* "+p+" ج\n🔴 *المتبقي:* "+rm+" ج\n🔗 *رابط التتبع:* \n"+url;
+            window.location.href = "whatsapp://send?phone="+ph+"&text="+encodeURIComponent(msg);
         } else {
-            if (now - parseInt(startTime) >= 86400000) {
-                localStorage.setItem('day_start_time', now);
-                localStorage.setItem('order_counter', '1');
-                localStorage.setItem('daily_orders_list', JSON.stringify([]));
-            }
+            var oMsg = "📥 *[نسخة المحل رقم #"+c+"]*\n👤 *العميل:* "+n+"\n🛠️ *الخدمة:* "+sv+"\n💰 *الإجمالي:* "+t+" ج | *المدفوع:* "+p+" ج\n🔴 *المتبقي:* "+rm+" ج";
+            window.location.href = "whatsapp://send?phone=201014828660&text="+encodeURIComponent(oMsg);
         }
     }
-
-    function updateBadge() {
-        var currentNum = localStorage.getItem('order_counter') || '1';
-        document.getElementById('currentOrderBadge').innerText = "فاتورة اليوم رقم: #" + currentNum;
+    function rep() {
+        var list = JSON.parse(localStorage.getItem('list')) || [];
+        if (list.length === 0) { alert("لا توجد فواتير اليوم!"); return; }
+        var t = 0, p = 0, r = 0, txt = "📊 تقرير حسابات الإسكافي شوز 📊\n====================\n\n";
+        list.forEach(function(x) {
+            txt += "فاتورة #"+x.id+" - العميل: "+x.name+"\nالحساب: "+x.total+" ج | المدفوع: "+x.paid+" ج | المتبقي: "+x.rem+" ج\n--------------------\n";
+            t+=x.total; p+=x.paid; r+=x.rem;
+        });
+        txt += "\n====================\n💰 إجمالي اليوم: "+t+" ج\n💵 إجمالي الخزنة: "+p+" ج\n🔴 إجمالي المتبقي بالسوق: "+r+" ج";
+        var b = new Blob([txt], { type: 'text/plain;charset=utf-8' }); var lnk = document.createElement('a');
+        lnk.href = URL.createObjectURL(b); lnk.download = "Report_" + new Date().toISOString().slice(0,10) + ".txt";
+        document.body.appendChild(lnk); lnk.click(); document.body.removeChild(lnk);
     }
-
-    function processOrder(target) {
-        var name = document.getElementById('clientName').value;
-        var total = document.getElementById('totalAmount').value;
-        var phone = document.getElementById('clientPhone').value.trim();
-
-        if(!name || !total || (target === 'client' && !phone)) {
-            alert("⚠️ برجاء ملء البيانات الأساسية أولاً!");
-            return;
-        }
-
-        checkDailyReset();
-
-        var receiveDate = document.getElementById('receiveDate').value;
-        var deliveryDate = document.getElementById('deliveryDate').value;
-        var sneakers = document.getElementById('sneakersCount').value;
-        var shoes = document.getElementById('shoesCount').value;
-        var service = document.getElementById('serviceType').value;
-        var paid = document.getElementById('paidAmount').value;
-        var remaining = document.getElementById('remainingAmount').value;
-        var currentInvoiceNum = localStorage.getItem('order_counter') || '1';
-
-        var currentOrder = {
-            invoiceNum: currentInvoiceNum,
-            name: name,
-            phone: phone,
-            total: parseFloat(total) || 0,
-            paid: parseFloat(paid) || 0,
-            remaining: parseFloat(remaining) || 0,
-            service: service,
-            items: "Sneakers (" + sneakers + ") - Shoes (" + shoes + ")"
-        };
-
-        var ordersList = JSON.parse(localStorage.getItem('daily_orders_list')) || [];
-        var alreadyExists = ordersList.some(function(o) { return o.invoiceNum === currentInvoiceNum && o.name === name; });
-        
-        if (!alreadyExists) {
-            ordersList.push(currentOrder);
-            localStorage.setItem('daily_orders_list', JSON.stringify(ordersList));
-            var nextNum = parseInt(currentInvoiceNum) + 1;
-            localStorage.setItem('order_counter', nextNum.toString());
-            updateBadge();
-        }
-
-        if (target === 'client') {
-            if (phone.startsWith("0")) phone = "2" + phone;
-            var trackPageUrl = "https://github.io" + encodeURIComponent(name) +
-                               "&rec=" + receiveDate + "&del=" + deliveryDate + "&snk=" + sneakers + "&shs=" + shoes +
-                               "&srv=" + encodeURIComponent(service) + "&tot=" + total + "&paid=" + paid + "&rem=" + remaining;
-
-            var clientMessage = "✨ *ALESKAFY SHOES* ✨\n" +
-                                "🧾 *Invoice Num:* #" + currentInvoiceNum + "\n\n" +
+</script>
+</body>
+</html>
 
 
 
