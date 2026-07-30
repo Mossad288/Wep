@@ -3,91 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALESKAFY SHOES - لوحة التحكم</title>
+    <title>ALESKAFY SHOES - لوحة التحكم المالية</title>
     <style>
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background: linear-gradient(135deg, #070a13 0%, #110e2e 100%);
+            background-color: #070a13;
+            background-image: linear-gradient(135deg, rgba(7, 10, 19, 0.88) 0%, rgba(17, 14, 46, 0.88) 100%), 
+                              url('https://transparenttextures.com');
             background-attachment: fixed;
-            margin: 0; 
-            padding: 15px; 
-            color: #f1f5f9;
-            position: relative;
-            overflow-x: hidden;
+            margin: 0; padding: 15px; color: #f1f5f9; position: relative;
+            min-height: 100vh; display: flex; align-items: center; justify-content: center; box-sizing: border-box;
         }
-        /* خلفية مدمجة بماركات الجزم العالمية الفخمة */
-        body::before {
-            content: "NIKE • ADIDAS • PUMA • JORDAN • GUCCI • PRADA • TIMBERLAND • VERSACE";
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(-15deg);
-            font-size: 36px;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 15px;
-            color: rgba(255, 255, 255, 0.02); /* تأثير شفاف مدمج ورايق */
-            width: 200%;
-            text-align: center;
-            line-height: 150px;
-            pointer-events: none;
-            z-index: -1;
+        .brands-watermark {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.12; 
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; padding: 30px; box-sizing: border-box; 
+            font-size: 14px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; pointer-events: none; user-select: none;
         }
+        .brands-watermark div { transform: rotate(-15deg); text-align: center; }
         .container { 
-            max-width: 500px; 
-            background: rgba(15, 23, 42, 0.85); 
-            padding: 25px; 
-            border-radius: 16px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
-            box-sizing: border-box;
-            margin: auto;
-            border: 1px solid rgba(245, 158, 11, 0.15); /* إطار ذهبي خفيف */
-            backdrop-filter: blur(10px);
+            width: 100%; max-width: 450px; background: rgba(15, 23, 42, 0.55); padding: 25px; border-radius: 16px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6); box-sizing: border-box; border: 1px solid rgba(245, 158, 11, 0.25); 
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
         }
-        .brand-header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .brand-title {
-            font-size: 26px;
-            font-weight: 800;
-            letter-spacing: 2px;
-            color: #f59e0b; 
-            margin: 0;
-            text-shadow: 0 2px 10px rgba(245, 158, 11, 0.3);
-        }
-        .brand-sub {
-            font-size: 13px;
-            color: #94a3b8;
-            margin-top: 5px;
-            letter-spacing: 1px;
-        }
+        .brand-header { text-align: center; margin-bottom: 20px; }
+        .brand-title { font-size: 26px; font-weight: 800; color: #f59e0b; margin: 0; text-shadow: 0 2px 10px rgba(245, 158, 11, 0.3); }
+        .brand-sub { font-size: 13px; color: #94a3b8; margin-top: 5px; }
+        .order-badge { background: #f59e0b; color: #070a13; font-weight: bold; padding: 4px 12px; border-radius: 20px; display: inline-block; margin-top: 8px; font-size: 13px; }
         label { font-weight: 600; display: block; margin-top: 14px; font-size: 13px; color: #cbd5e1; }
         input { 
-            width: 100%; 
-            padding: 12px; 
-            margin-top: 6px; 
-            border: 1px solid #334155; 
-            border-radius: 8px; 
-            box-sizing: border-box; 
-            font-size: 15px; 
-            background: #1e293b; 
-            color: white;
-            transition: all 0.3s;
+            width: 100%; padding: 12px; margin-top: 6px; border: 1px solid rgba(51, 65, 85, 0.6); border-radius: 8px; 
+            box-sizing: border-box; font-size: 15px; background: rgba(30, 41, 59, 0.7); color: white; transition: all 0.3s;
         }
         input:focus { border-color: #f59e0b; outline: none; box-shadow: 0 0 8px rgba(245, 158, 11, 0.2); }
         .row { display: flex; gap: 12px; }
         .row div { flex: 1; }
-        .btn-client { width: 100%; background: linear-gradient(90deg, #22c55e, #16a34a); color: white; padding: 14px; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; margin-top: 20px; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3); }
-        .btn-owner { width: 100%; background: linear-gradient(90deg, #3b82f6, #2563eb); color: white; padding: 14px; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; margin-top: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); }
+        .btn-client { width: 100%; background: linear-gradient(90deg, #22c55e, #16a34a); color: white; padding: 14px; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; margin-top: 20px; box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3); }
+        .btn-owner { width: 100%; background: linear-gradient(90deg, #3b82f6, #2563eb); color: white; padding: 14px; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; margin-top: 10px; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); }
+        .btn-report { width: 100%; background: linear-gradient(90deg, #f59e0b, #d97706); color: #070a13; padding: 14px; border: none; border-radius: 8px; font-size: 15px; font-weight: 800; cursor: pointer; margin-top: 15px; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3); }
     </style>
 </head>
 <body>
+
+<div class="brands-watermark">
+    <div>NIKE</div><div>ADIDAS</div><div>PUMA</div>
+    <div>JORDAN</div><div>GUCCI</div><div>PRADA</div>
+    <div>TIMBERLAND</div><div>VERSACE</div><div>NIKE</div>
+</div>
 
 <div class="container">
     <div class="brand-header">
         <h1 class="brand-title">ALESKAFY SHOES</h1>
         <div class="brand-sub">Premium Footwear Care & Repair</div>
+        <span class="order-badge" id="currentOrderBadge">فاتورة رقم: #1</span>
     </div>
     
     <form id="orderForm">
@@ -134,86 +101,99 @@
         </div>
 
         <label>🔴 المبلغ المتبقي (جنيه):</label>
-        <input type="number" id="remainingAmount" readonly style="background-color: #334155; color: #ef4444; font-weight: bold;">
+        <input type="number" id="remainingAmount" readonly style="background-color: rgba(51, 65, 85, 0.8); color: #ef4444; font-weight: bold;">
 
-        <button type="button" class="btn-client" onclick="sendToClient()">📱 1. إرسال الفاتورة للعميل</button>
-        <button type="button" class="btn-owner" onclick="sendToOwner()">📋 2. إرسال نسخة وتأكيد للمحل</button>
+        <button type="button" class="btn-client" onclick="processOrder('client')">📱 1. إرسال الفاتورة للعميل</button>
+        <button type="button" class="btn-owner" onclick="processOrder('owner')">📋 2. إرسال نسخة وتأكيد للمحل</button>
+        <button type="button" class="btn-report" onclick="downloadDailyReport()">📊 تحميل شيت الحسابات والتقرير اليومي</button>
     </form>
 </div>
 
 <script>
+    checkDailyReset();
+    updateBadge();
+
     function calculateRemaining() {
         const total = parseFloat(document.getElementById('totalAmount').value) || 0;
         const paid = parseFloat(document.getElementById('paidAmount').value) || 0;
         document.getElementById('remainingAmount').value = total - paid;
     }
 
-    function getBaseData() {
-        return {
-            name: document.getElementById('clientName').value,
-            receiveDate: document.getElementById('receiveDate').value,
-            deliveryDate: document.getElementById('deliveryDate').value,
-            sneakers: document.getElementById('sneakersCount').value,
-            shoes: document.getElementById('shoesCount').value,
-            service: document.getElementById('serviceType').value,
-            total: document.getElementById('totalAmount').value,
-            paid: document.getElementById('paidAmount').value,
-            remaining: document.getElementById('remainingAmount').value
-        };
-    }
-
-    function sendToClient() {
-        let phone = document.getElementById('clientPhone').value.trim();
-        if(!phone || !document.getElementById('clientName').value) {
-            alert("⚠️ برجاء ملء البيانات الأساسية ورقم العميل أولاً!");
-            return;
+    function checkDailyReset() {
+        const startTime = localStorage.getItem('day_start_time');
+        const now = new Date().getTime();
+        if (!startTime) {
+            localStorage.setItem('day_start_time', now);
+            localStorage.setItem('order_counter', '1');
+            localStorage.setItem('daily_orders_list', JSON.stringify([]));
+        } else {
+            if (now - parseInt(startTime) >= 86400000) {
+                localStorage.setItem('day_start_time', now);
+                localStorage.setItem('order_counter', '1');
+                localStorage.setItem('daily_orders_list', JSON.stringify([]));
+            }
         }
-        if (phone.startsWith("0")) phone = "2" + phone;
-
-        const d = getBaseData();
-
-        const trackPageUrl = "https://github.io" + encodeURIComponent(d.name) +
-                             "&rec=" + d.receiveDate +
-                             "&del=" + d.deliveryDate +
-                             "&snk=" + d.sneakers +
-                             "&shs=" + d.shoes +
-                             "&srv=" + encodeURIComponent(d.service) +
-                             "&tot=" + d.total +
-                             "&paid=" + d.paid +
-                             "&rem=" + d.remaining;
-
-        const clientMessage = `✨ *ALESKAFY SHOES* ✨\n` +
-                              `📋 *فاتورة حجز وإصلاح أحذية رقمية*\n\n` +
-                              `👤 *اسم العميل:* ${d.name}\n` +
-                              `💰 *الحساب الإجمالي:* ${d.total} جنيه\n` +
-                              `💵 *المدفوع مقدمًا:* ${d.paid} جنيه\n` +
-                              `🔴 *المبلغ المتبقي:* ${d.remaining} جنيه\n\n` +
-                              `🔗 *اضغط على الرابط لمشاهدة وتتبع فاتورتك بالكامل وميعاد الاستلام الشيك:* \n` + trackPageUrl;
-
-        window.location.href = "whatsapp://send?phone=" + phone + "&text=" + encodeURIComponent(clientMessage);
     }
 
-    function sendToOwner() {
-        if(!document.getElementById('clientName').value || !document.getElementById('totalAmount').value) {
+    function updateBadge() {
+        const currentNum = localStorage.getItem('order_counter') || '1';
+        document.getElementById('currentOrderBadge').innerText = "فاتورة اليوم رقم: #" + currentNum;
+    }
+
+    function processOrder(target) {
+        const name = document.getElementById('clientName').value;
+        const total = document.getElementById('totalAmount').value;
+        let phone = document.getElementById('clientPhone').value.trim();
+
+        if(!name || !total || (target === 'client' && !phone)) {
             alert("⚠️ برجاء ملء البيانات الأساسية أولاً!");
             return;
         }
-        const myPhone = "201014828660"; 
-        const d = getBaseData();
 
-        const ownerMessage = `📥 *[ALESKAFY SHOES - أرشيف المحل]*\n\n` +
-                             `👤 *العميل:* ${d.name}\n` +
-                             `📅 *الاستلام:* ${d.receiveDate} | *التسليم:* ${d.deliveryDate}\n` +
-                             `👟 *كوتشيات:* ${d.sneakers} | *جزم:* ${d.shoes}\n` +
-                             `🛠️ *العمل:* ${d.service}\n` +
-                             `💰 *الإجمالي:* ${d.total} جنيه | *المدفوع:* ${d.paid} جنيه\n` +
-                             `🔴 *المتبقي للتحصيل:* ${d.remaining} جنيه`;
+        checkDailyReset();
+
+        const receiveDate = document.getElementById('receiveDate').value;
+        const deliveryDate = document.getElementById('deliveryDate').value;
+        const sneakers = document.getElementById('sneakersCount').value;
+        const shoes = document.getElementById('shoesCount').value;
+        const service = document.getElementById('serviceType').value;
+        const paid = document.getElementById('paidAmount').value;
+        const remaining = document.getElementById('remainingAmount').value;
+        const currentInvoiceNum = localStorage.getItem('order_counter') || '1';
+
+        const currentOrder = {
+            invoiceNum: currentInvoiceNum,
+            name: name,
+            phone: phone,
+            total: parseFloat(total) || 0,
+            paid: parseFloat(paid) || 0,
+            remaining: parseFloat(remaining) || 0,
+            service: service,
+            items: "Sneakers (" + sneakers + ") - Shoes (" + shoes + ")"
+        };
+
+        let ordersList = JSON.parse(localStorage.getItem('daily_orders_list')) || [];
+        const alreadyExists = ordersList.some(o => o.invoiceNum === currentInvoiceNum && o.name === name);
         
-        window.location.href = "whatsapp://send?phone=" + myPhone + "&text=" + encodeURIComponent(ownerMessage);
-    }
-</script>
-</body>
-</html>
+        if (!alreadyExists) {
+            ordersList.push(currentOrder);
+            localStorage.setItem('daily_orders_list', JSON.stringify(ordersList));
+            let nextNum = parseInt(currentInvoiceNum) + 1;
+            localStorage.setItem('order_counter', nextNum.toString());
+            updateBadge();
+        }
+
+        if (target === 'client') {
+            if (phone.startsWith("0")) phone = "2" + phone;
+            const trackPageUrl = "https://github.io" + encodeURIComponent(name) +
+                                 "&rec=" + receiveDate + "&del=" + deliveryDate + "&snk=" + sneakers + "&shs=" + shoes +
+                                 "&srv=" + encodeURIComponent(service) + "&tot=" + total + "&paid=" + paid + "&rem=" + remaining;
+
+            const clientMessage = "✨ *ALESKAFY SHOES* ✨\n" +
+                                  "🧾 *Invoice Num:* #" + currentInvoiceNum + "\n\n" +
+                                  "👤 *Client Name:* " + name + "\n" +
+                                  "💰 *Total:* " + total + " EGP\n" +
+
 
 
 
