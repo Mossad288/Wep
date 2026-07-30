@@ -6,109 +6,31 @@
     <title>ALESKAFY SHOES - تتبع الفاتورة</title>
     <style>
         body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background: linear-gradient(135deg, #05070c 0%, #0c0a21 100%);
-            background-attachment: fixed;
-            margin: 0; 
-            padding: 15px; 
-            color: #f3f4f6;
-            position: relative;
-            overflow-x: hidden;
-        }
-        /* نقوش ماركات عالمية خفيفة وراقية في الخلفية مدموجة بذكاء */
-        body::before {
-            content: "NIKE • ADIDAS • PUMA • JORDAN • GUCCI • PRADA • TIMBERLAND • VERSACE";
-            position: fixed;
-            top: 40%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(15deg);
-            font-size: 32px;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 12px;
-            color: rgba(255, 255, 255, 0.015); /* مدموجة في السواد الفخم */
-            width: 200%;
-            text-align: center;
-            line-height: 130px;
-            pointer-events: none;
-            z-index: -1;
+            font-family: sans-serif; 
+            background: radial-gradient(circle, #0f121d 0%, #030408 100%);
+            margin: 0; padding: 15px; color: #fff; display: flex; align-items: center; justify-content: center; min-height: 100vh; box-sizing: border-box;
         }
         .container { 
-            max-width: 500px; 
-            background: rgba(31, 41, 55, 0.55); 
-            padding: 25px; 
-            border-radius: 16px; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.6); 
-            box-sizing: border-box; 
-            margin: auto;
-            border: 1px solid rgba(245, 158, 11, 0.2); /* برواز ذهبي رقيق للزبون */
-            backdrop-filter: blur(12px);
+            width: 100%; max-width: 450px; background: rgba(15, 23, 42, 0.55); padding: 25px; border-radius: 16px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6); box-sizing: border-box; border: 1px solid rgba(245, 158, 11, 0.25); 
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
         }
-        .brand-header {
-            text-align: center;
-            margin-bottom: 25px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding-bottom: 15px;
-        }
-        .brand-title {
-            font-size: 28px;
-            font-weight: 900;
-            letter-spacing: 3px;
-            color: #f59e0b; 
-            margin: 0;
-            text-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
-        }
-        .brand-sub {
-            font-size: 12px;
-            color: #9ca3af;
-            margin-top: 5px;
-            letter-spacing: 1px;
-        }
-        .invoice-card { 
-            background: rgba(17, 24, 39, 0.85); 
-            border-right: 6px solid #f59e0b; 
-            padding: 20px; 
-            border-radius: 8px; 
-            font-size: 15px; 
-            line-height: 1.8; 
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
-        }
+        .brand-header { text-align: center; margin-bottom: 25px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 15px; }
+        .brand-title { font-size: 28px; font-weight: 900; color: #f59e0b; margin: 0; text-shadow: 0 4px 15px rgba(245, 158, 11, 0.4); }
+        .brand-sub { font-size: 12px; color: #9ca3af; margin-top: 5px; }
+        .invoice-card { background: rgba(17, 24, 39, 0.75); border-right: 6px solid #f59e0b; padding: 20px; border-radius: 8px; font-size: 15px; line-height: 1.8; }
         .invoice-card b { color: #f59e0b; }
         .data-row { margin-bottom: 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.03); padding-bottom: 6px; }
-        .vodafone-box { 
-            background: linear-gradient(135deg, #450a0a 0%, #7f1d1d 100%); 
-            border: 1px dashed #ef4444; 
-            padding: 15px; 
-            border-radius: 10px; 
-            margin-top: 25px; 
-            text-align: center; 
-            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.2);
-        }
-        .vodafone-btn { 
-            background: #e60000; 
-            text-align: center; 
-            display: block; 
-            padding: 12px; 
-            color: white; 
-            text-decoration: none; 
-            border-radius: 8px; 
-            margin-top: 10px; 
-            font-weight: bold; 
-            font-size: 15px; 
-            transition: background 0.3s;
-            box-shadow: 0 4px 10px rgba(230, 0, 0, 0.3);
-        }
-        .vodafone-btn:hover { background: #b30000; }
+        .vodafone-box { background: linear-gradient(135deg, rgba(69, 10, 10, 0.8) 0%, rgba(127, 29, 29, 0.8) 100%); border: 1px dashed #ef4444; padding: 15px; border-radius: 10px; margin-top: 25px; text-align: center; }
+        .vodafone-btn { background: #e60000; text-align: center; display: block; padding: 12px; color: white; text-decoration: none; border-radius: 8px; margin-top: 10px; font-weight: bold; font-size: 15px; }
     </style>
 </head>
 <body>
-
 <div class="container">
     <div class="brand-header">
         <h1 class="brand-title">ALESKAFY SHOES</h1>
         <div class="brand-sub">VIP Customer Invoice & Tracking</div>
     </div>
-    
     <div class="invoice-card">
         <div class="data-row">📌 <b>تفاصيل الفاتورة والطلب الخاص بك:</b></div>
         <div class="data-row">👤 <b>اسم العميل:</b> <span id="outName"></span></div>
@@ -120,27 +42,23 @@
         <div class="data-row">💵 <b>المدفوع مقدمًا:</b> <span id="outPaid"></span> جنيه</div>
         <div style="font-size:17px; margin-top:8px;">🔴 <b>المبلغ المتبقي عند الاستلام:</b> <span id="outRem" style="color:#ef4444; font-weight:900;"></span> جنيه</div>
     </div>
-
     <div class="vodafone-box">
         <p style="margin:0 0 8px 0; font-weight:bold; font-size:15px;">💳 خدمة تحويل فودافون كاش للمحل</p>
         <p style="margin:5px 0; color:#fca5a5; font-size:17px; font-weight:bold;">01014828660</p>
-        <p style="font-size: 11px; color: #fca5a5; margin:0;">(برجاء تحويل الحساب المطلوب وإرسال صورة التحويل لتأكيد الحجز فوراً)</p>
         <a href="whatsapp://send?phone=201014828660&text=أريد%20تأكيد%20تحويل%20فودافون%20كاش" class="vodafone-btn">اضغط هنا لتأكيد الدفع للمحل عبر واتساب</a>
     </div>
 </div>
-
 <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    
-    document.getElementById('outName').innerText = urlParams.get('name') || "---";
-    document.getElementById('outService').innerText = urlParams.get('srv') || "---";
-    document.getElementById('outSneakers').innerText = urlParams.get('snk') || "0";
-    document.getElementById('outShoes').innerText = urlParams.get('shs') || "0";
-    document.getElementById('outRec').innerText = urlParams.get('rec') || "---";
-    document.getElementById('outDel').innerText = urlParams.get('del') || "---";
-    document.getElementById('outTotal').innerText = urlParams.get('tot') || "0";
-    document.getElementById('outPaid').innerText = urlParams.get('paid') || "0";
-    document.getElementById('outRem').innerText = urlParams.get('rem') || "0";
+    var u = new URLSearchParams(window.location.search);
+    document.getElementById('outName').innerText = u.get('name') || "---";
+    document.getElementById('outService').innerText = u.get('srv') || "---";
+    document.getElementById('outSneakers').innerText = u.get('snk') || "0";
+    document.getElementById('outShoes').innerText = u.get('shs') || "0";
+    document.getElementById('outRec').innerText = u.get('rec') || "---";
+    document.getElementById('outDel').innerText = u.get('del') || "---";
+    document.getElementById('outTotal').innerText = u.get('tot') || "0";
+    document.getElementById('outPaid').innerText = u.get('paid') || "0";
+    document.getElementById('outRem').innerText = u.get('rem') || "0";
 </script>
 </body>
 </html>
