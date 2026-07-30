@@ -62,7 +62,7 @@
    🌐 السوشيال ميديا للمحل
 
 </a>
-        <div class="notice-box">⚠️ تنبيه: المحل غير مسؤول عن أي شيء بعد ١٥ يوم من ميعاد التسليم.</div>
+        <div class="notice-box">⚠️ تنبيه: المحل غير مسؤول عن أي شيء بعد ١٥ يوم من ميعاد الإستلام  .</div>
         <div class="thanks-box">شكراً لزيارتكم الجميلة ❤️</div>
     </form>
 </div>
@@ -103,7 +103,16 @@
         
         if (m === 'client') {
             if (ph.startsWith("0")) ph = "2" + ph;
-            var msg = `✨ *ALESKAFY SHOES* ✨\n🧾 *طلب صيانة جديد رقم (#${c})*\n\n` + txt;
+            var msg = `✨ *ALESKAFY SHOES* ✨
+🧾 *طلب صيانة جديد رقم (#${c})*
+
+` + txt + `
+
+━━━━━━━━━━━━━━━
+🌐 تابع صفحة المحل على فيسبوك:
+https://www.facebook.com/61560847583033
+
+❤️ شكراً لزيارتكم ونتشرف بخدمتكم دائماً.`;
             if(lastSavedName === n) { localStorage.setItem('cnt', (parseInt(c)+1).toString()); updateNum(); }
             window.location.href = "whatsapp://send?phone="+ph+"&text="+encodeURIComponent(msg);
         } else {
