@@ -110,18 +110,20 @@
 </div>
 
 <script>
+    // تشغيل الإعدادات الأساسية فور فتح الصفحة
     checkDailyReset();
     updateBadge();
 
+    // دالة حساب المتبقي المصلحة واللحظية
     function calculateRemaining() {
-        const total = parseFloat(document.getElementById('totalAmount').value) || 0;
-        const paid = parseFloat(document.getElementById('paidAmount').value) || 0;
+        var total = parseFloat(document.getElementById('totalAmount').value) || 0;
+        var paid = parseFloat(document.getElementById('paidAmount').value) || 0;
         document.getElementById('remainingAmount').value = total - paid;
     }
 
     function checkDailyReset() {
-        const startTime = localStorage.getItem('day_start_time');
-        const now = new Date().getTime();
+        var startTime = localStorage.getItem('day_start_time');
+        var now = new Date().getTime();
         if (!startTime) {
             localStorage.setItem('day_start_time', now);
             localStorage.setItem('order_counter', '1');
@@ -136,14 +138,14 @@
     }
 
     function updateBadge() {
-        const currentNum = localStorage.getItem('order_counter') || '1';
+        var currentNum = localStorage.getItem('order_counter') || '1';
         document.getElementById('currentOrderBadge').innerText = "فاتورة اليوم رقم: #" + currentNum;
     }
 
     function processOrder(target) {
-        const name = document.getElementById('clientName').value;
-        const total = document.getElementById('totalAmount').value;
-        let phone = document.getElementById('clientPhone').value.trim();
+        var name = document.getElementById('clientName').value;
+        var total = document.getElementById('totalAmount').value;
+        var phone = document.getElementById('clientPhone').value.trim();
 
         if(!name || !total || (target === 'client' && !phone)) {
             alert("⚠️ برجاء ملء البيانات الأساسية أولاً!");
@@ -152,16 +154,16 @@
 
         checkDailyReset();
 
-        const receiveDate = document.getElementById('receiveDate').value;
-        const deliveryDate = document.getElementById('deliveryDate').value;
-        const sneakers = document.getElementById('sneakersCount').value;
-        const shoes = document.getElementById('shoesCount').value;
-        const service = document.getElementById('serviceType').value;
-        const paid = document.getElementById('paidAmount').value;
-        const remaining = document.getElementById('remainingAmount').value;
-        const currentInvoiceNum = localStorage.getItem('order_counter') || '1';
+        var receiveDate = document.getElementById('receiveDate').value;
+        var deliveryDate = document.getElementById('deliveryDate').value;
+        var sneakers = document.getElementById('sneakersCount').value;
+        var shoes = document.getElementById('shoesCount').value;
+        var service = document.getElementById('serviceType').value;
+        var paid = document.getElementById('paidAmount').value;
+        var remaining = document.getElementById('remainingAmount').value;
+        var currentInvoiceNum = localStorage.getItem('order_counter') || '1';
 
-        const currentOrder = {
+        var currentOrder = {
             invoiceNum: currentInvoiceNum,
             name: name,
             phone: phone,
@@ -172,27 +174,26 @@
             items: "Sneakers (" + sneakers + ") - Shoes (" + shoes + ")"
         };
 
-        let ordersList = JSON.parse(localStorage.getItem('daily_orders_list')) || [];
-        const alreadyExists = ordersList.some(o => o.invoiceNum === currentInvoiceNum && o.name === name);
+        var ordersList = JSON.parse(localStorage.getItem('daily_orders_list')) || [];
+        var alreadyExists = ordersList.some(function(o) { return o.invoiceNum === currentInvoiceNum && o.name === name; });
         
         if (!alreadyExists) {
             ordersList.push(currentOrder);
             localStorage.setItem('daily_orders_list', JSON.stringify(ordersList));
-            let nextNum = parseInt(currentInvoiceNum) + 1;
+            var nextNum = parseInt(currentInvoiceNum) + 1;
             localStorage.setItem('order_counter', nextNum.toString());
             updateBadge();
         }
 
         if (target === 'client') {
             if (phone.startsWith("0")) phone = "2" + phone;
-            const trackPageUrl = "https://github.io" + encodeURIComponent(name) +
-                                 "&rec=" + receiveDate + "&del=" + deliveryDate + "&snk=" + sneakers + "&shs=" + shoes +
-                                 "&srv=" + encodeURIComponent(service) + "&tot=" + total + "&paid=" + paid + "&rem=" + remaining;
+            var trackPageUrl = "https://github.io" + encodeURIComponent(name) +
+                               "&rec=" + receiveDate + "&del=" + deliveryDate + "&snk=" + sneakers + "&shs=" + shoes +
+                               "&srv=" + encodeURIComponent(service) + "&tot=" + total + "&paid=" + paid + "&rem=" + remaining;
 
-            const clientMessage = "✨ *ALESKAFY SHOES* ✨\n" +
-                                  "🧾 *Invoice Num:* #" + currentInvoiceNum + "\n\n" +
-                                  "👤 *Client Name:* " + name + "\n" +
-                                  "💰 *Total:* " + total + " EGP\n" +
+            var clientMessage = "✨ *ALESKAFY SHOES* ✨\n" +
+                                "🧾 *Invoice Num:* #" + currentInvoiceNum + "\n\n" +
+
 
 
 
