@@ -13,8 +13,11 @@
         .badge { background: #f59e0b; color: #000; font-weight: bold; padding: 4px 10px; border-radius: 15px; display: inline-block; margin: 5px 0; font-size: 12px; }
         label { display: block; margin-top: 10px; font-size: 13px; color: #ccc; }
         input { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #334155; border-radius: 6px; background: #1f2937; color: #fff; box-sizing: border-box; }
-        .row { display: flex; gap: 10px; } .row div { flex: 1; }
-        .btn { width: 100%; color: #fff; padding: 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .row-3 { display: flex; gap: 8px; } .row-3 div { flex: 1; }
+        .btn { width: 100%; color: #fff; padding: 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; box-sizing: border-box; }
+        .qr-box { background: #1f2937; padding: 15px; border-radius: 8px; margin-top: 15px; text-align: center; border: 1px dashed #f59e0b; }
+        .qr-box p { margin: 0 0 10px 0; font-size: 13px; font-weight: bold; color: #f59e0b; }
+        .qr-box img { background: white; padding: 8px; border-radius: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); width: 130px; height: 130px; }
     </style>
 </head>
 <body>
@@ -34,34 +37,55 @@
     <form>
         <label>👤 اسم العميل:</label><input type="text" id="name" placeholder="اسم العميل">
         <label>📱 واتساب العميل:</label><input type="tel" id="phone" placeholder="01012345678">
-        <div class="row">
-            <div><label>📅 تاريخ الاستلام:</label><input type="date" id="rDate"></div>
-            <div><label>📦 تاريخ التسليم:</label><input type="date" id="dDate"></div>
+        
+        <div class="row-3" style="display:flex; gap:10px;">
+            <div style="flex:1;"><label>📅 الاستلام:</label><input type="date" id="rDate"></div>
+            <div style="flex:1;"><label>📦 التسليم:</label><input type="date" id="dDate"></div>
         </div>
-        <div class="row">
+        
+        <!-- 3 خانات منسقة تماماً للأغراض شاملة الشنط -->
+        <div class="row-3">
             <div><label>👟 كوتشيات:</label><input type="number" id="snk" value="0"></div>
             <div><label>🥾 جزم:</label><input type="number" id="shs" value="0"></div>
+            <div><label>💼 شنط:</label><input type="number" id="bags" value="0"></div>
         </div>
-        <label>🛠️ الخدمة المطلوبة:</label><input type="text" id="srv" placeholder="غسيل، خياطة">
-        <div class="row">
-            <div><label>💰 الحساب الكلي:</label><input type="number" id="tot" oninput="calc()"></div>
-            <div><label>💵 المدفوع مقدمًا:</label><input type="number" id="paid" oninput="calc()"></div>
+        
+        <label>🛠️ الخدمة المطلوبة:</label><input type="text" id="srv" placeholder="غسيل، صيانة شنطة، خياطة">
+        
+        <div class="row-3" style="display:flex; gap:10px;">
+            <div style="flex:1;"><label>💰 الحساب الكلي:</label><input type="number" id="tot" oninput="calc()"></div>
+            <div style="flex:1;"><label>💵 المدفوع مقدمًا:</label><input type="number" id="paid" oninput="calc()"></div>
         </div>
         <label>🔴 المبلغ المتبقي:</label><input type="number" id="rem" readonly style="color:#ef4444; font-weight:bold; background:#111827;">
         
         <button type="button" class="btn" style="background:#22c55e; margin-top:15px;" onclick="save('client')">📱 1. إرسال للعميل</button>
         <button type="button" class="btn" style="background:#3b82f6;" onclick="save('owner')">📋 2. إرسال للمحل</button>
         <button type="button" class="btn" style="background:#f59e0b; color:#000;" onclick="rep()">📊 تحميل التقرير اليومي</button>
+        
+        <div class="qr-box">
+            <p>📱 سكان للباركود لمتابعة صفحة الفيسبوك للمحل</p>
+            <img id="qrImage" src="" alt="Facebook QR Code">
+        </div>
     </form>
 </div>
 
 <script>
+    // تم ربط بيانات محلك الفعلية بنجاح هنا خلف الكواليس
+    var FACEBOOK_PAGE_URL = "https://www.facebook.com/share/1EiLHzcbSM/?mibextid=wwXIfr";
+    var OWNER_PHONE = "201090274601"; 
+
     var lastSavedName = "";
+    
+    function generateFacebookQR() {
+        var apiGrid = "https://qrserver.com" + encodeURIComponent(FACEBOOK_PAGE_URL);
+        document.getElementById('qrImage').src = apiGrid;
+    }
+
     function checkPassword() {
         if (document.getElementById('passInput').value === '2020') {
             document.getElementById('lockScreen').style.display = 'none';
             document.getElementById('mainApp').style.display = 'block';
-            resetCheck(); updateNum();
+            resetCheck(); updateNum(); generateFacebookQR(); 
         } else {
             alert("❌ رمز الدخول السري خاطئ!");
             document.getElementById('passInput').value = "";
@@ -85,7 +109,7 @@
         var n = document.getElementById('name').value; var t = document.getElementById('tot').value; var ph = document.getElementById('phone').value.trim();
         if(!n || !t || (m==='client' && !ph)) { alert("املا البيانات الأساسية!"); return; }
         resetCheck();
-        var r = document.getElementById('rDate').value, d = document.getElementById('dDate').value, sk = document.getElementById('snk').value, ss = document.getElementById('shs').value, sv = document.getElementById('srv').value, p = document.getElementById('paid').value, rm = document.getElementById('rem').value, c = localStorage.getItem('cnt') || '1';
+        var r = document.getElementById('rDate').value, d = document.getElementById('dDate').value, sk = document.getElementById('snk').value, ss = document.getElementById('shs').value, bg = document.getElementById('bags').value, sv = document.getElementById('srv').value, p = document.getElementById('paid').value, rm = document.getElementById('rem').value, c = localStorage.getItem('cnt') || '1';
         var list = JSON.parse(localStorage.getItem('list')) || [];
         if (n !== lastSavedName) {
             list.push({ id: c, name: n, total: parseFloat(t)||0, paid: parseFloat(p)||0, rem: parseFloat(rm)||0 });
@@ -95,13 +119,13 @@
         }
         if (m === 'client') {
             if (ph.startsWith("0")) ph = "2" + ph;
-            var msg = `✨ *ALESKAFY SHOES* ✨\n🧾 *طلب صيانة أحذية جديد رقم (#${c})*\n\n👤 *اسم العميل:* ${n}\n📅 *تاريخ الاستلام:* ${r}\n📦 *تاريخ التسليم المتوقع:* ${d}\n\n👟 *عدد الكوتشيات:* ${sk}\n🥾 *عدد الجزم الكلاسيك:* ${ss}\n🛠️ *الخدمة المطلوبة:* ${sv}\n\n💰 *الحساب الإجمالي:* ${t} جنيه\n💵 *المدفوع مقدمًا:* ${p} جنيه\n🔴 *المبلغ المتبقي:* ${rm} جنيه`;
+            var msg = `✨ *ALESKAFY SHOES* ✨\n🧾 *طلب صيانة جديد رقم (#${c})*\n\n👤 *اسم العميل:* ${n}\n📅 *تاريخ الاستلام:* ${r}\n📦 *تاريخ التسليم المتوقع:* ${d}\n\n👟 *عدد الكوتشيات:* ${sk}\n🥾 *عدد الجزم الكلاسيك:* ${ss}\n💼 *عدد الشنط:* ${bg}\n🛠️ *الخدمة المطلوبة:* ${sv}\n\n💰 *الحساب الإجمالي:* ${t} جنيه\n💵 *المدفوع مقدمًا:* ${p} جنيه\n🔴 *المبلغ المتبقي:* ${rm} جنيه`;
             if(lastSavedName === n) { localStorage.setItem('cnt', (parseInt(c)+1).toString()); updateNum(); }
             window.location.href = "whatsapp://send?phone="+ph+"&text="+encodeURIComponent(msg);
         } else {
-            var oMsg = `📥 *[ALESKAFY SHOES - نسخة المحل]*\n🧾 *أرشيف فاتورة اليوم رقم (#${c})*\n\n👤 *اسم العميل:* ${n}\n📅 *تاريخ الاستلام:* ${r}\n📦 *تاريخ التسليم:* ${d}\n\n👟 *عدد الكوتشيات:* ${sk}\n🥾 *عدد الجزم الكلاسيك:* ${ss}\n🛠️ *الخدمة المطلوبة:* ${sv}\n\n💰 *الحساب الإجمالي:* ${t} جنيه\n💵 *المدفوع مقدمًا:* ${p} جنيه\n🔴 *المبلغ المتبقي:* ${rm} جنيه`;
+            var oMsg = `📥 *[ALESKAFY SHOES - نسخة المحل]*\n🧾 *أرشيف فاتورة اليوم رقم (#${c})*\n\n👤 *اسم العميل:* ${n}\n📅 *تاريخ الاستلام:* ${r}\n📦 *تاريخ التسليم:* ${d}\n\n👟 *عدد الكوتشيات:* ${sk}\n🥾 *عدد الجزم الكلاسيك:* ${ss}\n💼 *عدد الشنط:* ${bg}\n🛠️ *الخدمة المطلوبة:* ${sv}\n\n💰 *الحساب الإجمالي:* ${t} جنيه\n💵 *المدفوع مقدمًا:* ${p} جنيه\n🔴 *المبلغ المتبقي:* ${rm} جنيه`;
             if(lastSavedName === n) { localStorage.setItem('cnt', (parseInt(c)+1).toString()); updateNum(); }
-            window.location.href = "whatsapp://send?phone=201014828660&text="+encodeURIComponent(oMsg);
+            window.location.href = "whatsapp://send?phone="+OWNER_PHONE+"&text="+encodeURIComponent(oMsg);
         }
     }
     function rep() {
