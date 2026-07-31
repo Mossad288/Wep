@@ -6,8 +6,7 @@
     <title>ALESKAFY SHOES</title>
     <style>
         body { font-family: sans-serif; background: #0b0f19; margin: 0; padding: 15px; color: #fff; display: flex; align-items: center; justify-content: center; min-height: 100vh; box-sizing: border-box; }
-        .lock-container { width: 100%; max-width: 380px; background: #111827; padding: 30px 20px; border-radius: 12px; border: 1px solid #f59e0b; text-align: center; }
-        .container { width: 100%; max-width: 430px; background: #111827; padding: 20px; border-radius: 12px; border: 1px solid #f59e0b; display: none; }
+        .container { width: 100%; max-width: 430px; background: #111827; padding: 20px; border-radius: 12px; border: 1px solid #f59e0b; }
         h1 { text-align: center; color: #f59e0b; margin: 0; font-size: 24px; }
         .badge { background: #f59e0b; color: #000; font-weight: bold; padding: 4px 10px; border-radius: 15px; display: inline-block; margin: 5px 0; font-size: 12px; }
         label { display: block; margin-top: 10px; font-size: 13px; color: #ccc; }
@@ -15,24 +14,16 @@
         .row { display: flex; gap: 10px; } .row div { flex: 1; }
         .btn { width: 100%; color: #fff; padding: 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; box-sizing: border-box; }
         .notice-box { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; padding: 12px; margin-top: 20px; text-align: center; font-size: 13px; color: #fca5a5; }
-        .thanks-box { text-align: center; font-size: 14px; font-weight: bold; color: #f59e0b; margin-top: 12px; }
     </style>
 </head>
 <body>
-
-<div id="lockScreen" class="lock-container">
-    <h1 style="color:#f59e0b; margin:0;">ALESKAFY SHOES</h1>
-    <p style="color:#94a3b8; font-size:12px; margin-bottom:20px;">Secure Management System</p>
-    <input type="password" id="passInput" placeholder="أدخل كود الدخول السري" style="text-align:center; font-size:18px; margin-bottom:15px;">
-    <button type="button" class="btn" style="background:#f59e0b; color:#000; font-weight:800;" onclick="checkPassword()">🔓 تسجيل الدخول</button>
-</div>
 
 <div class="container" id="mainApp">
     <div style="text-align:center;">
         <h1>ALESKAFY SHOES</h1>
         <span class="badge" id="badge">فاتورة رقم: #1</span>
     </div>
-    <form>
+    <form id="invoiceForm">
         <label>👤 اسم العميل:</label><input type="text" id="name" placeholder="اسم العميل">
         <label>📱 واتساب العميل:</label><input type="tel" id="phone" placeholder="01012345678">
         <div class="row">
@@ -54,102 +45,115 @@
         <button type="button" class="btn" style="background:#22c55e; margin-top:15px;" onclick="save('client')">📱 1. إرسال للعميل</button>
         <button type="button" class="btn" style="background:#3b82f6;" onclick="save('owner')">📋 2. إرسال للمحل</button>
         <button type="button" class="btn" style="background:#f59e0b; color:#000;" onclick="rep()">📊 تحميل التقرير اليومي</button>
-        <a href="https://www.facebook.com/61560847583033"
-   target="_blank"
-   rel="noopener noreferrer"
-   class="btn"
-   style="background:#1877f2;">
-   🌐 السوشيال ميديا للمحل
-
-</a>
-        <div class="notice-box">⚠️ تنبيه: المحل غير مسؤول عن أي شيء بعد ١٥ يوم من ميعاد الإستلام  .</div>
-        
+        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="btn" style="background:#1877f2;">🌐 السوشيال ميديا للمحل</a>
+        <div class="notice-box">⚠️ تنبيه: المحل غير مسؤول عن أي شيء بعد ١٥ يوم من ميعاد الإستلام .</div>
     </form>
 </div>
 
 <script>
-    var OWNER_PHONE = "201090274601"; var lastSavedName = "";
-    function checkPassword() {
-    if (document.getElementById('passInput').value === '2020') {
-        document.getElementById('lockScreen').style.display = 'none';
-        document.getElementById('mainApp').style.display = 'block';
+    var OWNER_PHONE = "201090274601"; 
+    var lastSavedName = "";
 
-
+    // تشغيل النظام تلقائياً وبدء الحسابات فوراً دون شاشة قفل
+    window.onload = function() {
         resetCheck();
         updateNum();
-    } else {
-        alert("❌ رمز خاطئ!");
-    }
-}
+    };
+
     function calc() {
         var t = parseFloat(document.getElementById('tot').value) || 0;
         var p = parseFloat(document.getElementById('paid').value) || 0;
         document.getElementById('rem').value = t - p;
     }
-    function resetCheck() {
-    const today = new Date().toLocaleDateString("en-CA");
-    const savedDate = localStorage.getItem("invoiceDate");
 
-    if (savedDate !== today) {
-        localStorage.setItem("invoiceDate", today);
-        localStorage.setItem("cnt", "1");
-        localStorage.setItem("list", JSON.stringify([]));
+    function resetCheck() {
+        const today = new Date().toLocaleDateString("en-CA");
+        const savedDate = localStorage.getItem("invoiceDate");
+
+        if (savedDate !== today) {
+            localStorage.setItem("invoiceDate", today);
+            localStorage.setItem("cnt", "1");
+            localStorage.setItem("list", JSON.stringify([]));
+        }
     }
-}
-    function updateNum() { document.getElementById('badge').innerText = "فاتورة اليوم رقم: #" + (localStorage.getItem('cnt') || '1'); }
+
+    function updateNum() { 
+        document.getElementById('badge').innerText = "فاتورة اليوم رقم: #" + (localStorage.getItem('cnt') || '1'); 
+    }
+
     function save(m) {
         var n = document.getElementById('name').value, t = document.getElementById('tot').value, ph = document.getElementById('phone').value.trim();
         if(!n || !t || (m==='client' && !ph)) { alert("املا البيانات!"); return; }
         resetCheck();
-        var r = document.getElementById('rDate').value, d = document.getElementById('dDate').value, sk = document.getElementById('snk').value, ss = document.getElementById('shs').value, bg = document.getElementById('bags').value, sv = document.getElementById('srv').value, p = document.getElementById('paid').value, rm = document.getElementById('rem').value, c = localStorage.getItem('cnt') || '1';
+        
+        var r = document.getElementById('rDate').value, 
+            d = document.getElementById('dDate').value, 
+            sk = document.getElementById('snk').value, 
+            ss = document.getElementById('shs').value, 
+            bg = document.getElementById('bags').value, 
+            sv = document.getElementById('srv').value, 
+            p = document.getElementById('paid').value, 
+            rm = document.getElementById('rem').value, 
+            c = localStorage.getItem('cnt') || '1';
+            
         var list = JSON.parse(localStorage.getItem('list')) || [];
+        
         if (n !== lastSavedName) {
             list.push({ id: c, name: n, total: parseFloat(t)||0, paid: parseFloat(p)||0, rem: parseFloat(rm)||0 });
-            localStorage.setItem('list', JSON.stringify(list)); lastSavedName = n;
-        } else { c = (parseInt(c) - 1).toString(); if(c === "0") c = "1"; }
-        
-        var txt = `👤 *اسم العميل:* ${n}\n📅 *تاريخ الاستلام:* ${r}\n📦 *تاريخ التسليم:* ${d}\n\n👟 *كوتشيات:* ${sk} | 🥾 *جزم:* ${ss} | 💼 *شنط:* ${bg}\n🛠️ *الخدمة:* ${sv}\n\n💰 *الحساب الكلي:* ${t} جنيه\n💵 *المدفوع مقدمًا:* ${p} جنيه\n🔴 *المبلغ المتبقي:* ${rm} جنيه\n\n⚠️ *تنبيه:* المحل غير مسؤول عن أي شيء بعد ١٥ يوم من ميعاد التسليم.\n\n🙏 *شكراً لزيارتكم الجميلة* ❤️`;
-        
-        if (m === 'client') {
-            if (ph.startsWith("0")) ph = "2" + ph;
-            var msg = `✨ *ALESKAFY SHOES* ✨
-🧾 *طلب صيانة جديد رقم (#${c})*
-
-` + txt + `
-
-━━━━━━━━━━━━━━━
-🌐 تابع صفحة المحل على فيسبوك:
-https://www.facebook.com/61560847583033
-
-❤️ شكراً لزيارتكم ونتشرف بخدمتكم دائماً.`;
-            if(lastSavedName === n) { localStorage.setItem('cnt', (parseInt(c)+1).toString()); updateNum(); }
-            window.location.href = "whatsapp://send?phone="+ph+"&text="+encodeURIComponent(msg);
-        } else {
-            var oMsg = `📥 *[ALESKAFY SHOES - نسخة المحل]*\n🧾 *أرشيف فاتورة اليوم رقم (#${c})*\n\n` + txt;
-            if(lastSavedName === n) { localStorage.setItem('cnt', (parseInt(c)+1).toString()); updateNum(); }
-            window.location.href = "whatsapp://send?phone="+OWNER_PHONE+"&text="+encodeURIComponent(oMsg);
+            localStorage.setItem('list', JSON.stringify(list)); 
+            lastSavedName = n;
+            localStorage.setItem('cnt', (parseInt(c) + 1).toString());
+            updateNum();
+        } else { 
+            c = (parseInt(c) - 1).toString(); 
+            if(c === "0") c = "1"; 
         }
-    }
-    function rep() {
-        var list = JSON.parse(localStorage.getItem('list')) || []; if (list.length === 0) { alert("لا توجد فواتير!"); return; }
-        var t = 0, p = 0, r = 0, txt = "📊 تقرير حسابات الإسكافي شوز 📊\n====================\n\n";
-        list.forEach(function(x) {
-            txt += "فاتورة #"+x.id+" - العميل: "+x.name+"\nالحساب: "+x.total+" ج | المدفوع: "+x.paid+" ج | الباقي: "+x.rem+" ج\n--------------------\n"; t+=x.total; p+=x.paid; r+=x.rem;
-        });
-        txt += "\n====================\n💰 إجمالي اليوم: "+t+" ج\n💵 إجمالي الخزنة: "+p+" ج\n🔴 إجمالي المتبقي: "+r+" ج";
-        var b = new Blob(
-    ["\uFEFF" + txt],
-    { type: "text/plain;charset=utf-8" }
-);
+        
+        var txt = `👤 *اسم العميل:* ${n}\n` +
+                  `🧾 *فاتورة رقم:* #${c}\n` +
+                  `📅 *تاريخ الاستلام:* ${r}\n` +
+                  `📦 *تاريخ التسليم:* ${d}\n\n` +
+                  `👟 *كوتشيات:* ${sk} | 🥾 *جزم:* ${ss} | 💼 *شنط:* ${bg}\n` +
+                  `🛠️ *الخدمة:* ${sv}\n\n` +
+                  `💰 *الحساب الكلي:* ${t} جنيه\n` +
+                  `💵 *المدفوع مقدمًا:* ${p} جنيه\n` +
+                  `🔴 *المبلغ المتبقي:* ${rm} جنيه\n\n` +
+                  `⚠️ *تنبيه:* المحل غير مسؤول عن أي شيء بعد ١٥ يوم من ميعاد الإستلام.`;
 
-var lnk = document.createElement('a');
-lnk.href = URL.createObjectURL(b);
-lnk.download = "Report_" + new Date().toISOString().slice(0,10) + ".txt";
-document.body.appendChild(lnk);
-lnk.click();
-document.body.removeChild(lnk);
-URL.revokeObjectURL(lnk.href);
-}
+        var targetPhone = (m === 'client') ? (ph.startsWith('2') ? ph : '2' + ph) : OWNER_PHONE;
+        window.open(`https://whatsapp.com{targetPhone}&text=${encodeURIComponent(txt)}`, '_blank');
+    }
+
+    function rep() {
+        var list = JSON.parse(localStorage.getItem('list')) || [];
+        if(list.length === 0) { alert("لا توجد فواتير مسجلة لليوم!"); return; }
+        
+        var reportTxt = `📊 *التقرير اليومي لـ ALESKAFY SHOES*\n` +
+                        `📅 *التاريخ:* ${localStorage.getItem("invoiceDate") || ''}\n----------------------------\n`;
+        
+        var totalDay = 0, totalPaid = 0, totalRem = 0;
+        
+        list.forEach(function(item) {
+            reportTxt += `#${item.id} | العميل: ${item.name}\n` +
+                        `إجمالي: ${item.total} ج | مدفوع: ${item.paid} ج | متبقي: ${item.rem} ج\n` +
+                        `----------------------------\n`;
+            totalDay += item.total;
+            totalPaid += item.paid;
+            totalRem += item.rem;
+        });
+        
+        reportTxt += `📈 *الخلاصة اليومية:*\n` +
+                     `💰 إجمالي فواتير اليوم: ${totalDay} جنيه\n` +
+                     `💵 إجمالي الكاش المستلم: ${totalPaid} جنيه\n` +
+                     `🔴 إجمالي الآجل / المتبقي: ${totalRem} جنيه`;
+                     
+        var blob = new Blob([reportTxt], { type: "text/plain;charset=utf-8" });
+        var link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = `تقرير_${localStorage.getItem("invoiceDate") || 'اليوم'}.txt`;
+        link.click();
+    }
 </script>
+
 </body>
 </html>
