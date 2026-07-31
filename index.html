@@ -70,23 +70,33 @@
 <script>
     var OWNER_PHONE = "201090274601"; var lastSavedName = "";
     function checkPassword() {
-        if (document.getElementById('passInput').value === '2020') {
-            document.getElementById('lockScreen').style.display = 'none';
-            document.getElementById('mainApp').style.display = 'block';
-            resetCheck(); updateNum();
-        } else { alert("❌ رمز خاطئ!"); document.getElementById('passInput').value = ""; }
+    if (document.getElementById('passInput').value === '2020') {
+        document.getElementById('lockScreen').style.display = 'none';
+        document.getElementById('mainApp').style.display = 'block';
+
+        localStorage.clear();
+
+        resetCheck();
+        updateNum();
+    } else {
+        alert("❌ رمز خاطئ!");
     }
+}
     function calc() {
         var t = parseFloat(document.getElementById('tot').value) || 0;
         var p = parseFloat(document.getElementById('paid').value) || 0;
         document.getElementById('rem').value = t - p;
     }
     function resetCheck() {
-        var s = localStorage.getItem('day_s'); var n = new Date().getTime();
-        if (!s || (n - parseInt(s) >= 86400000)) {
-            localStorage.setItem('day_s', n); localStorage.setItem('cnt', '1'); localStorage.setItem('list', JSON.stringify([]));
-        }
+    const today = new Date().toLocaleDateString("en-CA"); // YYYY-MM-DD
+    const savedDate = localStorage.getItem("invoiceDate");
+
+    if (savedDate !== today) {
+        localStorage.setItem("invoiceDate", today);
+        localStorage.setItem("cnt", "1");
+        localStorage.setItem("list", JSON.stringify([]));
     }
+}
     function updateNum() { document.getElementById('badge').innerText = "فاتورة اليوم رقم: #" + (localStorage.getItem('cnt') || '1'); }
     function save(m) {
         var n = document.getElementById('name').value, t = document.getElementById('tot').value, ph = document.getElementById('phone').value.trim();
