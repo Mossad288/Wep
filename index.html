@@ -45,7 +45,7 @@
         <button type="button" class="btn" style="background:#22c55e; margin-top:15px;" onclick="save('client')">📱 1. إرسال للعميل</button>
         <button type="button" class="btn" style="background:#3b82f6;" onclick="save('owner')">📋 2. إرسال للمحل (تأكيد وقفل الفاتورة)</button>
         <button type="button" class="btn" style="background:#f59e0b; color:#000;" onclick="rep()">📊 تحميل التقرير اليومي</button>
-        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="btn" style="background:#1877f2;">🌐 السوشيال ميديا للمحل</a>
+        <a href="https://www.facebook.com/61560847583033" target="_blank" rel="noopener noreferrer" class="btn" style="background:#1877f2;">🌐 السوشيال ميديا للمحل</a>
         <div class="notice-box">⚠️ تنبيه: المحل غير مسؤول عن أي شيء بعد ١٥ يوم من ميعاد الإستلام .</div>
     </form>
 </div>
@@ -121,7 +121,7 @@
             localStorage.setItem('cnt', nextCount.toString());
             
             // فتح شات الواتساب للمحل أولاً
-            var whatsappUrl = `https://whatsapp.com{targetPhone}&text=${encodeURIComponent(txt)}`;
+            var whatsappUrl = `https://wa.me/{targetPhone}&text=${encodeURIComponent(txt)}`;
             window.open(whatsappUrl, '_blank');
 
             // تحديث الشاشة ومسح الحقول للعميل القادم فوراً
@@ -130,7 +130,7 @@
             document.getElementById('rem').value = '';
         } else {
             // لو إرسال للعميل، يفتح الواتساب فقط مع الحفاظ على نفس الرقم والبيانات لتتمكن من إرسالها للمحل لاحقاً
-            var whatsappUrl = `https://whatsapp.com{targetPhone}&text=${encodeURIComponent(txt)}`;
+            var whatsappUrl = `https://wa.me/{targetPhone}&text=${encodeURIComponent(txt)}`;
             window.open(whatsappUrl, '_blank');
         }
     }
@@ -155,7 +155,7 @@
         
         repTxt += `\n📈 *الخلاصة المادية:*\n💵 إجمالي المبيعات: ${totalSales} جنيه\n💰 إجمالي الكاش المستلم: ${totalPaid} جنيه\n🔴 إجمالي الآجل المتبقي: ${totalRem} جنيه`;
         
-        var whatsappUrl = `https://whatsapp.com{OWNER_PHONE}&text=${encodeURIComponent(repTxt)}`;
+        var whatsappUrl = `https://wa.me/{OWNER_PHONE}&text=${encodeURIComponent(repTxt)}`;
         window.open(whatsappUrl, '_blank');
     }
 </script>
