@@ -88,7 +88,7 @@
         document.getElementById('rem').value = t - p;
     }
     function resetCheck() {
-    const today = new Date().toLocaleDateString("en-CA"); // YYYY-MM-DD
+    const today = new Date().toLocaleDateString("en-CA");
     const savedDate = localStorage.getItem("invoiceDate");
 
     if (savedDate !== today) {
