@@ -14,12 +14,11 @@
         .row { display: flex; gap: 10px; } .row div { flex: 1; }
         .btn { width: 100%; color: #fff; padding: 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; box-sizing: border-box; }
         .notice-box { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; padding: 12px; margin-top: 20px; text-align: center; font-size: 13px; color: #fca5a5; }
-        .thanks-box { text-align: center; font-size: 14px; font-weight: bold; color: #f59e0b; margin-top: 12px; }
     </style>
 </head>
 <body>
 
-<div class="container" id="mainApp" style="display: block;">
+<div class="container" id="mainApp">
     <div style="text-align:center;">
         <h1>ALESKAFY SHOES</h1>
         <span class="badge" id="badge">فاتورة رقم: #1</span>
@@ -46,56 +45,95 @@
         <button type="button" class="btn" style="background:#22c55e; margin-top:15px;" onclick="save('client')">📱 1. إرسال للعميل</button>
         <button type="button" class="btn" style="background:#3b82f6;" onclick="save('owner')">📋 2. إرسال للمحل</button>
         <button type="button" class="btn" style="background:#f59e0b; color:#000;" onclick="rep()">📊 تحميل التقرير اليومي</button>
-        <a href="https://facebook.com"
-   target="_blank"
-   rel="noopener noreferrer"
-   class="btn"
-   style="background:#1877f2;">
-   🌐 السوشيال ميديا للمحل
-
-</a>
-        <div class="notice-box">⚠️ تنبيه: المحل غير مسؤول عن أي شيء بعد ١٥ يوم من ميعاد الإستلام  .</div>
-        
+        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="btn" style="background:#1877f2;">🌐 السوشيال ميديا للمحل</a>
+        <div class="notice-box">⚠️ تنبيه: المحل غير مسؤول عن أي شيء بعد ١٥ يوم من ميعاد الإستلام .</div>
     </form>
 </div>
 
 <script>
-    var OWNER_PHONE = "201090274601"; var lastSavedName = "";
+    var OWNER_PHONE = "201090274601"; 
+    var lastSavedName = "";
 
-    // تشغيل فوري للنظام لتخطي خطوة تسجيل الدخول المحذوفة
+    // تشغيل النظام تلقائياً عند فتح الصفحة
     window.onload = function() {
         resetCheck();
         updateNum();
-    }
+    };
 
     function calc() {
         var t = parseFloat(document.getElementById('tot').value) || 0;
         var p = parseFloat(document.getElementById('paid').value) || 0;
         document.getElementById('rem').value = t - p;
     }
-    function resetCheck() {
-    const today = new Date().toLocaleDateString("en-CA");
-    const savedDate = localStorage.getItem("invoiceDate");
 
-    if (savedDate !== today) {
-        localStorage.setItem("invoiceDate", today);
-        localStorage.setItem("cnt", "1");
-        localStorage.setItem("list", JSON.stringify([]));
+    function resetCheck() {
+        const today = new Date().toLocaleDateString("en-CA");
+        const savedDate = localStorage.getItem("invoiceDate");
+        if (savedDate !== today) {
+            localStorage.setItem("invoiceDate", today);
+            localStorage.setItem("cnt", "1");
+            localStorage.setItem("list", JSON.stringify([]));
+        }
     }
-}
-    function updateNum() { document.getElementById('badge').innerText = "فاتورة اليوم رقم: #" + (localStorage.getItem('cnt') || '1'); }
+
+    function updateNum() { 
+        document.getElementById('badge').innerText = "فاتورة اليوم رقم: #" + (localStorage.getItem('cnt') || '1'); 
+    }
+
     function save(m) {
         var n = document.getElementById('name').value, t = document.getElementById('tot').value, ph = document.getElementById('phone').value.trim();
         if(!n || !t || (m==='client' && !ph)) { alert("املا البيانات!"); return; }
         resetCheck();
-        var r = document.getElementById('rDate').value, d = document.getElementById('dDate').value, sk = document.getElementById('snk').value, ss = document.getElementById('shs').value, bg = document.getElementById('bags').value, sv = document.getElementById('srv').value, p = document.getElementById('paid').value, rm = document.getElementById('rem').value, c = localStorage.getItem('cnt') || '1';
+        
+        var r = document.getElementById('rDate').value, 
+            d = document.getElementById('dDate').value, 
+            sk = document.getElementById('snk').value, 
+            ss = document.getElementById('shs').value, 
+            bg = document.getElementById('bags').value, 
+            sv = document.getElementById('srv').value, 
+            p = document.getElementById('paid').value, 
+            rm = document.getElementById('rem').value, 
+            c = localStorage.getItem('cnt') || '1';
+            
         var list = JSON.parse(localStorage.getItem('list')) || [];
+        
         if (n !== lastSavedName) {
             list.push({ id: c, name: n, total: parseFloat(t)||0, paid: parseFloat(p)||0, rem: parseFloat(rm)||0 });
-            localStorage.setItem('list', JSON.stringify(list)); lastSavedName = n;
-        } else { c = (parseInt(c) - 1).toString(); if(c === "0") c = "1"; }
+            localStorage.setItem('list', JSON.stringify(list)); 
+            lastSavedName = n;
+            localStorage.setItem('cnt', (parseInt(c) + 1).toString());
+            updateNum();
+        }
+
+        var txt = `👤 *اسم العميل:* ${n}\n📅 *تاريخ الاستلام:* ${r}\n📦 *تاريخ التسليم:* ${d}\n\n👟 *كوتشيات:* ${sk} | 🥾 *جزم:* ${ss} | 💼 *شنط:* ${bg}\n🛠️ *الخدمة:* ${sv}\n\n💰 *الحساب الكلي:* ${t} جنيه\n💵 *المدفوع مقدمًا:* ${p} جنيه\n🔴 *المبلغ المتبقي:* ${rm} جنيه\n\n⚠️ تنبيه: المحل غير مسؤول عن أي شيء بعد ١٥ يوم من ميعاد الإستلام.`;
         
-        var txt = `👤 *اسم العميل:* ${n}\n📅 *تاريخ الاستلام:* ${r}\n📦 *تاريخ التسليم:* ${d}\n\n👟 *كوتشيات:* ${sk} | 🥾 *جزم:* ${ss} | 💼 *شنط:* ${bg}\n🛠️ *الخدمة:* ${sv}\n\n💰 *الحساب الكلي:* ${t} جنيه\n💵 *المدفوع مقدمًا:* ${p} جنيه\n🔴 *المبلغ المتبقي:* ${rm} جنيه\n\n⚠️ *`
+        var targetPhone = (m === 'client') ? (ph.startsWith('2') ? ph : '2' + ph) : OWNER_PHONE;
+        
+        window.open(`https://whatsapp.com{targetPhone}&text=${encodeURIComponent(txt)}`, '_blank');
+    }
+
+    function rep() {
+        var list = JSON.parse(localStorage.getItem('list')) || [];
+        if(list.length === 0) { alert("لا توجد فواتير مسجلة لليوم!"); return; }
+        
+        var reportTxt = "📊 التقرير اليومي للمحل:\n\n";
+        var totalSales = 0, totalPaid = 0, totalRem = 0;
+        
+        list.forEach(function(item) {
+            reportTxt += `#️⃣ فاتورة ${item.id} - العميل: ${item.name}\n💰 كلي: ${item.total} | 💵 مدفوع: ${item.paid} | 🔴 متبقي: ${item.rem}\n------------------------\n`;
+            totalSales += item.total;
+            totalPaid += item.paid;
+            totalRem += item.rem;
+        });
+        
+        reportTxt += `\n📈 إجمالي المبيعات: ${totalSales} جنيه\n💵 إجمالي المقدمات: ${totalPaid} جنيه\n🔴 إجمالي المتبقي: ${totalRem} جنيه`;
+        
+        var blob = new Blob([reportTxt], { type: "text/plain;charset=utf-8" });
+        var link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = `Report_${localStorage.getItem("invoiceDate") || "today"}.txt`;
+        link.click();
+    }
 </script>
 
 </body>
