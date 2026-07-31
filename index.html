@@ -7,7 +7,7 @@
     <style>
         body { font-family: sans-serif; background: #0b0f19; margin: 0; padding: 15px; color: #fff; display: flex; align-items: center; justify-content: center; min-height: 100vh; box-sizing: border-box; }
         .lock-container { width: 100%; max-width: 380px; background: #111827; padding: 30px 20px; border-radius: 12px; border: 1px solid #f59e0b; text-align: center; }
-        .container { width: 100%; max-width: 430px; background: #111827; padding: 20px; border-radius: 12px; border: 1px solid #f59e0b; display: none; }
+        .container { width: 100%; max-width: 430px; background: #111827; padding: 20px; border-radius: 12px; border: 1px solid #f59e0b; display: block; }
         h1 { text-align: center; color: #f59e0b; margin: 0; font-size: 24px; }
         .badge { background: #f59e0b; color: #000; font-weight: bold; padding: 4px 10px; border-radius: 15px; display: inline-block; margin: 5px 0; font-size: 12px; }
         label { display: block; margin-top: 10px; font-size: 13px; color: #ccc; }
@@ -18,14 +18,7 @@
         .thanks-box { text-align: center; font-size: 14px; font-weight: bold; color: #f59e0b; margin-top: 12px; }
     </style>
 </head>
-<body>
-
-<div id="lockScreen" class="lock-container">
-    <h1 style="color:#f59e0b; margin:0;">ALESKAFY SHOES</h1>
-    <p style="color:#94a3b8; font-size:12px; margin-bottom:20px;">Secure Management System</p>
-    <input type="password" id="passInput" placeholder="أدخل كود الدخول السري" style="text-align:center; font-size:18px; margin-bottom:15px;">
-    <button type="button" class="btn" style="background:#f59e0b; color:#000; font-weight:800;" onclick="checkPassword()">🔓 تسجيل الدخول</button>
-</div>
+<body onload="resetCheck(); updateNum();">
 
 <div class="container" id="mainApp">
     <div style="text-align:center;">
@@ -69,17 +62,6 @@
 
 <script>
     var OWNER_PHONE = "201090274601"; var lastSavedName = "";
-    function checkPassword() {
-    if (document.getElementById('passInput').value === '2020') {
-        document.getElementById('lockScreen').style.display = 'none';
-        document.getElementById('mainApp').style.display = 'block';
-
-        resetCheck();
-        updateNum();
-    } else {
-        alert("❌ رمز خاطئ!");
-    }
-}
     function calc() {
         var t = parseFloat(document.getElementById('tot').value) || 0;
         var p = parseFloat(document.getElementById('paid').value) || 0;
@@ -151,3 +133,4 @@ URL.revokeObjectURL(lnk.href);
 }
 </script>
 </body>
+</html>
