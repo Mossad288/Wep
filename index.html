@@ -12,7 +12,7 @@
         label { display: block; margin-top: 10px; font-size: 13px; color: #ccc; }
         input { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #334155; border-radius: 6px; background: #1f2937; color: #fff; box-sizing: border-box; }
         .row { display: flex; gap: 10px; } .row div { flex: 1; }
-        .btn { width: 100%; color: #fff; padding: 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; box-sizing: border-box; }
+        .btn { width: 100%; color: #fff; padding: 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; box-sizing: border-box; text-align: center; }
         .notice-box { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; padding: 12px; margin-top: 20px; text-align: center; font-size: 13px; color: #fca5a5; }
     </style>
 </head>
@@ -24,28 +24,29 @@
         <span class="badge" id="badge">فاتورة رقم: #1</span>
     </div>
     <form id="invoiceForm">
-        <label>👤 اسم العميل:</label><input type="text" id="name" placeholder="اسم العميل">
-        <label>📱 واتساب العميل:</label><input type="tel" id="phone" placeholder="01012345678">
+        <label>👤 اسم العميل:</label><input type="text" id="name" placeholder="اسم العميل" oninput="prepareLinks()">
+        <label>📱 واتساب العميل:</label><input type="tel" id="phone" placeholder="01012345678" oninput="prepareLinks()">
         <div class="row">
-            <div><label>📅 تاريخ الاستلام:</label><input type="date" id="rDate"></div>
-            <div><label>📦 تاريخ التسليم:</label><input type="date" id="dDate"></div>
+            <div><label>📅 تاريخ الاستلام:</label><input type="date" id="rDate" onchange="prepareLinks()"></div>
+            <div><label>📦 تاريخ التسليم:</label><input type="date" id="dDate" onchange="prepareLinks()"></div>
         </div>
         <div class="row">
-            <div><label>👟 كوتشيات:</label><input type="number" id="snk" value="0"></div>
-            <div><label>🥾 جزم:</label><input type="number" id="shs" value="0"></div>
-            <div><label>💼 شنط:</label><input type="number" id="bags" value="0"></div>
+            <div><label>👟 كوتشيات:</label><input type="number" id="snk" value="0" oninput="prepareLinks()"></div>
+            <div><label>🥾 جزم:</label><input type="number" id="shs" value="0" oninput="prepareLinks()"></div>
+            <div><label>💼 شنط:</label><input type="number" id="bags" value="0" oninput="prepareLinks()"></div>
         </div>
-        <label>🛠️ الخدمة المطلوبة:</label><input type="text" id="srv" placeholder="غسيل، خياطة">
+        <label>🛠️ الخدمة المطلوبة:</label><input type="text" id="srv" placeholder="غسيل، خياطة" oninput="prepareLinks()">
         <div class="row">
             <div><label>💰 الحساب الكلي:</label><input type="number" id="tot" oninput="calc()"></div>
             <div><label>💵 المدفوع مقدمًا:</label><input type="number" id="paid" oninput="calc()"></div>
         </div>
         <label>🔴 المبلغ المتبقي:</label><input type="number" id="rem" readonly style="color:#ef4444; font-weight:bold; background:#111827;">
         
-        <button type="button" class="btn" style="background:#22c55e; margin-top:15px;" onclick="save('client')">📱 1. إرسال للعميل</button>
-        <button type="button" class="btn" style="background:#3b82f6;" onclick="save('owner')">📋 2. إرسال للمحل (تأكيد وقفل الفاتورة)</button>
-        <button type="button" class="btn" style="background:#f59e0b; color:#000;" onclick="rep()">📊 تحميل التقرير اليومي</button>
-        <a href="https://www.facebook.com/61560847583033" target="_blank" rel="noopener noreferrer" class="btn" style="background:#1877f2;">🌐 السوشيال ميديا للمحل</a>
+        <a id="clientBtn" href="#" target="_blank" class="btn" style="background:#22c55e; margin-top:15px;" onclick="return checkClientData()">📱 1. إرسال للعميل</a>
+        <a id="ownerBtn" href="#" target="_blank" class="btn" style="background:#3b82f6;" onclick="return saveOwnerData()">📋 2. إرسال للمحل وقفل الفاتورة</a>
+        <a id="repBtn" href="#" target="_blank" class="btn" style="background:#f59e0b; color:#000;">📊 تحميل التقرير اليومي</a>
+        <a href="https://facebook.com" target="_blank" class="btn" style="background:#1877f2;">🌐 السوشيال ميديا للمحل</a>
+        
         <div class="notice-box">⚠️ تنبيه: المحل غير مسؤول عن أي شيء بعد ١٥ يوم من ميعاد الإستلام .</div>
     </form>
 </div>
@@ -56,17 +57,24 @@
     window.onload = function() {
         resetCheck();
         updateNum();
+        setDefaultDates();
+        prepareLinks();
     };
 
     function calc() {
         var t = parseFloat(document.getElementById('tot').value) || 0;
         var p = parseFloat(document.getElementById('paid').value) || 0;
         document.getElementById('rem').value = t - p;
+        prepareLinks();
     }
 
-    // تصفير العداد لـ 1 تلقائياً بمجرد دخول يوم جديد بعد الساعة 12 بالليل
+    function setDefaultDates() {
+        const today = new Date().toLocaleDateString("en-CA");
+        document.getElementById('rDate').value = today;
+    }
+
     function resetCheck() {
-        const today = new Date().toLocaleDateString("en-CA"); // صيغة YYYY-MM-DD ثابتة ومضمونة
+        const today = new Date().toLocaleDateString("en-CA");
         const savedDate = localStorage.getItem("invoiceDate");
         if (savedDate !== today) {
             localStorage.setItem("invoiceDate", today);
@@ -80,20 +88,20 @@
         document.getElementById('badge').innerText = "فاتورة اليوم رقم: #" + currentCount; 
     }
 
-    function save(m) {
+    function formatWhatsAppPhone(phoneStr) {
+        var cleaned = phoneStr.replace(/\D/g, '');
+        if (cleaned.startsWith('0')) {
+            cleaned = '2' + cleaned;
+        }
+        return cleaned;
+    }
+
+    function prepareLinks() {
         var n = document.getElementById('name').value.trim(), 
             t = document.getElementById('tot').value.trim(), 
-            ph = document.getElementById('phone').value.trim();
-        
-        if(!n || !t || (m==='client' && !ph)) { 
-            alert("برجاء ملء اسم العميل والحساب الكلي! ورقم الهاتف مطلوب عند الإرسال للعميل."); 
-            return; 
-        }
-        
-        resetCheck();
-        
-        var r = document.getElementById('rDate').value, 
-            d = document.getElementById('dDate').value, 
+            ph = document.getElementById('phone').value.trim(),
+            r = document.getElementById('rDate').value, 
+            d = document.getElementById('dDate').value || 'غير محدد', 
             sk = document.getElementById('snk').value || '0', 
             ss = document.getElementById('shs').value || '0', 
             bg = document.getElementById('bags').value || '0', 
@@ -101,62 +109,72 @@
             p = document.getElementById('paid').value || '0', 
             rm = document.getElementById('rem').value || '0', 
             c = localStorage.getItem('cnt') || '1';
-            
-        // صياغة رسالة الواتساب الاحترافية والموحدة للعميل والمحل
+
         var txt = `🧾 *فاتورة رقم:* #${c}\n👤 *اسم العميل:* ${n}\n📅 *تاريخ الاستلام:* ${r}\n📦 *تاريخ التسليم:* ${d}\n\n👟 *كوتشيات:* ${sk} | 🥾 *جزم:* ${ss} | 💼 *شنط:* ${bg}\n🛠️ *الخدمة:* ${sv}\n\n💰 *الحساب الكلي:* ${t} جنيه\n💵 *المدفوع مقدمًا:* ${p} جنيه\n🔴 *المبلغ المتبقي:* ${rm} جنيه\n\n⚠️ *تنبيه:* المحل غير مسؤول عن أي شيء بعد ١٥ يوم من ميعاد الإستلام.`;
         
-        var targetPhone = OWNER_PHONE;
-        if (m === 'client') {
-            targetPhone = ph.startsWith('2') ? ph : '2' + ph;
-        }
+        var clientTarget = formatWhatsAppPhone(ph);
+        document.getElementById('clientBtn').href = `https://whatsapp.com{clientTarget}&text=${encodeURIComponent(txt)}`;
+        document.getElementById('ownerBtn').href = `https://whatsapp.com{OWNER_PHONE}&text=${encodeURIComponent(txt)}`;
 
-        // لو الضغط على زر (إرسال للمحل) يتم حفظ الداتا في السجل وزيادة العداد وتصفير الخانات تلقائياً
-        if (m === 'owner') {
-            var list = JSON.parse(localStorage.getItem('list')) || [];
-            list.push({ id: c, name: n, total: parseFloat(t)||0, paid: parseFloat(p)||0, rem: parseFloat(rm)||0 });
-            localStorage.setItem('list', JSON.stringify(list));
-
-            // زيادة العداد للفاتورة القادمة للزبون التالي
-            var nextCount = parseInt(c) + 1;
-            localStorage.setItem('cnt', nextCount.toString());
+        var list = JSON.parse(localStorage.getItem('list')) || [];
+        if(list.length > 0) {
+            var repTxt = `📊 *التقرير اليومي لـ ALESKAFY SHOES*\n📅 *التاريخ:* ${localStorage.getItem("invoiceDate")}\n\n`;
+            var totalSales = 0, totalPaid = 0, totalRem = 0;
+            list.forEach(function(item) {
+                repTxt += `#${item.id} | العميل: ${item.name}\n💰 الإجمالي: ${item.total} | 💵 المدفوع: ${item.paid} | 🔴 المتبقي: ${item.rem}\n-----------------------\n`;
+                totalSales += item.total; totalPaid += item.paid; totalRem += item.rem;
+            });
+            repTxt += `\n📈 *الخلاصة المادية:*\n💵 إجمالي المبيعات: ${totalSales} جنيه\n💰 إجمالي الكاش المستلم: ${totalPaid} جنيه\n🔴 إجمالي الآجل المتبقي: ${totalRem} جنيه`;
             
-            // فتح شات الواتساب للمحل أولاً
-            var whatsappUrl = `https://wa.me/{targetPhone}&text=${encodeURIComponent(txt)}`;
-            window.open(whatsappUrl, '_blank');
-
-            // تحديث الشاشة ومسح الحقول للعميل القادم فوراً
-            updateNum();
-            document.getElementById('invoiceForm').reset();
-            document.getElementById('rem').value = '';
+            document.getElementById('repBtn').href = `https://whatsapp.com{OWNER_PHONE}&text=${encodeURIComponent(repTxt)}`;
+            document.getElementById('repBtn').onclick = null;
         } else {
-            // لو إرسال للعميل، يفتح الواتساب فقط مع الحفاظ على نفس الرقم والبيانات لتتمكن من إرسالها للمحل لاحقاً
-            var whatsappUrl = `https://wa.me/{targetPhone}&text=${encodeURIComponent(txt)}`;
-            window.open(whatsappUrl, '_blank');
+            document.getElementById('repBtn').href = "#";
+            document.getElementById('repBtn').onclick = function() { alert("لا توجد فواتير مقفلة ومسجلة في التقرير اليومي حتى الآن!"); return false; };
         }
     }
 
-    function rep() {
-        resetCheck();
-        var list = JSON.parse(localStorage.getItem('list')) || [];
-        if(list.length === 0) { 
-            alert("لا توجد فواتير مغلقة في التقرير اليومي حتى الآن!"); 
-            return; 
+    function checkClientData() {
+        var n = document.getElementById('name').value.trim(), 
+            t = document.getElementById('tot').value.trim(), 
+            ph = document.getElementById('phone').value.trim();
+        if(!n || !t || !ph) { 
+            alert("برجاء ملء اسم العميل والحساب الكلي ورقم الهاتف أولاً لإرسال الفاتورة!"); 
+            return false; 
         }
+        return true;
+    }
+
+    function saveOwnerData() {
+        var n = document.getElementById('name').value.trim(), 
+            t = document.getElementById('tot').value.trim();
         
-        var repTxt = `📊 *التقرير اليومي لـ ALESKAFY SHOES*\n📅 *التاريخ:* ${localStorage.getItem("invoiceDate")}\n\n`;
-        var totalSales = 0, totalPaid = 0, totalRem = 0;
-        
-        list.forEach(function(item) {
-            repTxt += `#${item.id} | العميل: ${item.name}\n💰 الإجمالي: ${item.total} | 💵 المدفوع: ${item.paid} | 🔴 المتبقي: ${item.rem}\n-----------------------\n`;
-            totalSales += item.total;
-            totalPaid += item.paid;
-            totalRem += item.rem;
-        });
-        
-        repTxt += `\n📈 *الخلاصة المادية:*\n💵 إجمالي المبيعات: ${totalSales} جنيه\n💰 إجمالي الكاش المستلم: ${totalPaid} جنيه\n🔴 إجمالي الآجل المتبقي: ${totalRem} جنيه`;
-        
-        var whatsappUrl = `https://wa.me/{OWNER_PHONE}&text=${encodeURIComponent(repTxt)}`;
-        window.open(whatsappUrl, '_blank');
+        if(!n || !t) { 
+            alert("برجاء ملء اسم العميل والحساب الكلي قبل الحفظ والإرسال للمحل!"); 
+            return false; 
+        }
+
+        resetCheck();
+        var p = document.getElementById('paid').value || '0', 
+            rm = document.getElementById('rem').value || '0', 
+            c = localStorage.getItem('cnt') || '1';
+
+        var list = JSON.parse(localStorage.getItem('list')) || [];
+        list.push({ id: c, name: n, total: parseFloat(t)||0, paid: parseFloat(p)||0, rem: parseFloat(rm)||0 });
+        localStorage.setItem('list', JSON.stringify(list));
+
+        var nextCount = parseInt(c) + 1;
+        localStorage.setItem('cnt', nextCount.toString());
+
+        setTimeout(function() {
+            updateNum();
+            document.getElementById('invoiceForm').reset();
+            document.getElementById('rem').value = '';
+            setDefaultDates();
+            prepareLinks();
+        }, 1200);
+
+        return true;
     }
 </script>
 
