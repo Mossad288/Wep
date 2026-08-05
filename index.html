@@ -12,7 +12,7 @@
         .badge { background: #f59e0b; color: #000; font-weight: bold; padding: 4px 10px; border-radius: 15px; display: inline-block; margin: 5px 0; font-size: 12px; }
         label { display: block; margin-top: 10px; font-size: 13px; color: #ccc; }
         input { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #334155; border-radius: 6px; background: #1f2937; color: #fff; box-sizing: border-box; }
-        .row { display: flex; gap: 10px; } .row div { flex: 1; }
+        .row { display: flex; gap: 10px; flex-wrap: wrap; } .row div { flex: 1; min-width: 30%; }
         .btn { width: 100%; color: #fff; padding: 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; box-sizing: border-box; }
         .notice-box { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; padding: 12px; margin-top: 20px; text-align: center; font-size: 13px; color: #fca5a5; }
         .thanks-box { text-align: center; font-size: 14px; font-weight: bold; color: #f59e0b; margin-top: 12px; }
@@ -35,6 +35,11 @@
         <div class="row">
             <div><label>👟 كوتشيات:</label><input type="number" id="snk" value="0"></div>
             <div><label>🥾 جزم:</label><input type="number" id="shs" value="0"></div>
+            <div><label>🩴 شبشب:</label><input type="number" id="slp" value="0"></div>
+        </div>
+        <div class="row">
+            <div><label>👡 صندل:</label><input type="number" id="snd" value="0"></div>
+            <div><label>👞 فردة:</label><input type="number" id="sng" value="0"></div>
             <div><label>💼 شنط:</label><input type="number" id="bags" value="0"></div>
         </div>
         <label>🛠️ الخدمة المطلوبة:</label><input type="text" id="srv" placeholder="غسيل، خياطة">
@@ -82,14 +87,14 @@
         var n = document.getElementById('name').value, t = document.getElementById('tot').value, ph = document.getElementById('phone').value.trim();
         if(!n || !t || (m==='client' && !ph)) { alert("املا البيانات!"); return; }
         resetCheck();
-        var r = document.getElementById('rDate').value, d = document.getElementById('dDate').value, sk = document.getElementById('snk').value, ss = document.getElementById('shs').value, bg = document.getElementById('bags').value, sv = document.getElementById('srv').value, p = document.getElementById('paid').value, rm = document.getElementById('rem').value, c = localStorage.getItem('cnt') || '1';
+        var r = document.getElementById('rDate').value, d = document.getElementById('dDate').value, sk = document.getElementById('snk').value, ss = document.getElementById('shs').value, sl = document.getElementById('slp').value, sn = document.getElementById('snd').value, sg = document.getElementById('sng').value, bg = document.getElementById('bags').value, sv = document.getElementById('srv').value, p = document.getElementById('paid').value, rm = document.getElementById('rem').value, c = localStorage.getItem('cnt') || '1';
         var list = JSON.parse(localStorage.getItem('list')) || [];
         if (n !== lastSavedName) {
             list.push({ id: c, name: n, total: parseFloat(t)||0, paid: parseFloat(p)||0, rem: parseFloat(rm)||0 });
             localStorage.setItem('list', JSON.stringify(list)); lastSavedName = n;
         } else { c = (parseInt(c) - 1).toString(); if(c === "0") c = "1"; }
         
-        var txt = `👤 *اسم العميل:* ${n}\n📅 *تاريخ الاستلام:* ${r}\n📦 *تاريخ التسليم:* ${d}\n\n👟 *كوتشيات:* ${sk} | 🥾 *جزم:* ${ss} | 💼 *شنط:* ${bg}\n🛠️ *الخدمة:* ${sv}\n\n💰 *الحساب الكلي:* ${t} جنيه\n💵 *المدفوع مقدمًا:* ${p} جنيه\n🔴 *المبلغ المتبقي:* ${rm} جنيه\n\n⚠️ *تنبيه:* المحل غير مسؤول عن أي شيء بعد ١٥ يوم من ميعاد التسليم.\n\n🙏 *شكراً لزيارتكم الجميلة* ❤️`;
+        var txt = `👤 *اسم العميل:* ${n}\n📅 *تاريخ الاستلام:* ${r}\n📦 *تاريخ التسليم:* ${d}\n\n👟 *كوتشيات:* ${sk} | 🥾 *جزم:* ${ss} | 🩴 *شبشب:* ${sl}\n👡 *صندل:* ${sn} | 👞 *فردة:* ${sg} | 💼 *شنط:* ${bg}\n🛠️ *الخدمة:* ${sv}\n\n💰 *الحساب الكلي:* ${t} جنيه\n💵 *المدفوع مقدمًا:* ${p} جنيه\n🔴 *المبلغ المتبقي:* ${rm} جنيه\n\n⚠️ *تنبيه:* المحل غير مسؤول عن أي شيء بعد ١٥ يوم من ميعاد التسليم.\n\n🙏 *شكراً لزيارتكم الجميلة* ❤️`;
         
         if (m === 'client') {
             if (ph.startsWith("0")) ph = "2" + ph;
